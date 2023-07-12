@@ -12,8 +12,8 @@ class FormCreator {
       ];
     }
   
-    public function generateForm() {
-      $form = '<form method="POST" action="" class ="w-50">';
+    public function generateForm($submitext) {
+      $form = '<form method="POST" action="" class ="w-100">';
     
       foreach ($this->fields as $field) {
         $name = $field['name'];
@@ -24,19 +24,19 @@ class FormCreator {
         $form .= '<label for="' . $name . '" class="form-label">' . $label . '</label>';
     
         if ($type === 'text') {
-          $form .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control" required>';
+          $form .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control mb-3" required>';
         } elseif ($type === 'email') {
-          $form .= '<input type="email" name="' . $name . '" id="' . $name . '" class="form-control" required>';
+          $form .= '<input type="email" name="' . $name . '" id="' . $name . '" class="form-control mb-3" required>';
         } elseif ($type === 'textarea') {
-          $form .= '<textarea name="' . $name . '" id="' . $name . '" class="form-control" rows="4" required></textarea>';
+          $form .= '<textarea name="' . $name . '" id="' . $name . '" class="form-control mb-3" rows="4" required></textarea>';
         }elseif ($type === 'password') {
-          $form .= '<input type="password" name="' . $name . '" id= "' . $name . '" class = "form-control" required';
+          $form .= '<input type="password" name="' . $name . '" id= "' . $name . '" class = "form-control mb-3" required';
         }
         
         $form .= '</div>';
       }
     
-      $form .= '<button type="submit" class="btn btn-primary">Envoyer</button>';
+      $form .= '<button type="submit" class="btn btn-primary"> ' . $submitext .'</button>';
       $form .= '</form>';
     
       return $form;

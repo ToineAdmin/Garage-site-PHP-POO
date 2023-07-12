@@ -1,24 +1,26 @@
-<?php 
+<?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Database;
 
 
 
-if (isset($_GET['p'])){
+if (isset($_GET['p'])) {
     $p = $_GET['p'];
 } else {
     $p = 'home';
 }
 
+
+
 // Instance de la base de données pour l'utilisé dans la page
 $db = new Database('db_garage');
 
 
-if ($p === 'home'){
+if ($p === 'home') {
     require '../pages/home.php';
-} else if ($p === 'occasion'){
-    require '../pages/occasion.php';
+} else if ($p === 'login') {
+    require '../pages/login.php';
 };
 
 // $db = new Database('db_garage');

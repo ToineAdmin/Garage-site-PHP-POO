@@ -9,6 +9,9 @@ use App\Services;
 use App\ContactForm;
 use App\FormCreator;
 
+
+
+
 ?>
 <main>
     <section class="py-5 text-center container" id="home">
@@ -97,7 +100,7 @@ use App\FormCreator;
             $contactForm->addField('message', 'textarea', 'Message :');
 
             // Afficher le formulaire de contact
-            echo $contactForm->generateForm();
+            echo $contactForm->generateForm('Envoyez');
 
             // Traitement du formualire
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {

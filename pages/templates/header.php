@@ -29,7 +29,7 @@
 <body>
 
 
-  <div class="container">
+  <div class="container fixed-top">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ">
       <div class="col-md-3 mb-2 mb-md-0">
         <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
@@ -38,19 +38,28 @@
           </svg>
         </a>
       </div>
+      <nav>
+        <?php
+        $menuItems = array(
+          'Accueil' => '../public/index.php#home',
+          'Services' => '../public/index.php#services',
+          'Occasions' => '../public/index.php#occasions',
+          'Qui sommes nous?' => '../public/index.php#about',
+          'Contact' => '../public/index.php#contact'
+        );
 
-      <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li class="nav-item"><a href="#home" class="nav-link active" aria-current="page">Accueil</a></li>
-        <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
-        <li class="nav-item"><a href="#occasions" class="nav-link">Occasions</a></li>
-        <li class="nav-item"><a href="#about" class="nav-link">Qui sommes nous?</a></li>
-        <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
-      </ul>
-
+        echo '<ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">';
+        foreach ($menuItems as $label => $url) {
+          echo '<li class="nav-item"><a href="' . $url . '" class="nav-link">' . $label . '</a></li>';
+        }
+        echo '</ul>';
+        ?>
+      </nav>
       <div class="col-md-3 text-end">
         <form action="../pages/login.php" method="get">
-          <button type="submit" class="btn btn-outline-primary me-2">Login</button>
+          <button type="submit" class="btn btn-outline-primary me-2">Connectez vous</button>
         </form>
       </div>
+
     </header>
   </div>
