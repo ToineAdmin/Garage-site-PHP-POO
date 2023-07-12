@@ -1,13 +1,13 @@
 <?php
 $title = 'Garage V.PARROT';
 require '../pages/templates/header.php';
+require_once __DIR__ . '/../public/index.php';
 
 use App\Cars;
 use App\Users;
 use App\Services;
 use App\ContactForm;
-
-
+use App\FormCreator;
 
 ?>
 <main>
@@ -86,48 +86,39 @@ use App\ContactForm;
         <div class="row">
             <h2 class="text-center">CONTACT</h2>
         </div>
-        <div class="row">
-        <?php
+        <div class="row contact-form container d-flex justify-content-center">
+            <?php
+
+            // Créer le formulaire de contact
+
+            $contactForm = new FormCreator();
+            $contactForm->addField('username', 'text', 'Nom :');
+            $contactForm->addField('email', 'email', 'E-mail :');
+            $contactForm->addField('message', 'textarea', 'Message :');
+
+            // Afficher le formulaire de contact
+            echo $contactForm->generateForm();
+
             // Traitement du formualire
-                if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                    // Récupérer les données du formulaire
-                    $name = $_POST["name"];
-                    $email = $_POST["email"];
-                    $message = $_POST["message"];
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Récupérer les données du formulaire
+                $name = $_POST['name'];
+                $email = $_POST['email'];
+                $message = $_POST['message'];
 
-                    // Créer une instance du formulaire de contact
-                    $contactForm = new ContactForm($name, $email, $message);
+                // Créer une instance du formulaire de contact
+                $contactForm = new ContactForm($name, $email, $message);
 
-                    //Sécuriser les inputs
-                    $name = $contactForm->sanitizeInput($name);
-                    $email = $contactForm->sanitizeInput($email);
-                    $message = $contactForm->sanitizeInput($message);
-                
-                    // Traiter le formulaire
-                    $contactForm->processForm();
-                    
-                }
-                
+                // Sécuriser les inputs
+                $name = $contactForm->sanitizeInput($name);
+                $email = $contactForm->sanitizeInput($email);
+                $message = $contactForm->sanitizeInput($message);
+
+                // Traiter le formulaire
+                $contactForm->processForm();
+            }
+
             ?>
-            <form method="POST" action="">
-                <div class="mb-3 w-25">
-                    <label for="name" class="form-label">Nom :</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
-                </div>
-
-                <div class="mb-3 w-25">
-                    <label for="email" class="form-label">E-mail :</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-
-                <div class="mb-3 w-50">
-                    <label for="message" class="form-label">Message :</label>
-                    <textarea id="message" name="message" class="form-control" required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Envoyer</button>
-            </form>
-
 
         </div>
     </section>
