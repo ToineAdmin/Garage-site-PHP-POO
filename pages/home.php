@@ -52,7 +52,9 @@ use App\FormCreator;
 
                     //affiche en fonction de la base de données les voitures
 
-                    $data = $db->query('SELECT * FROM cars');
+                    $stmt = $db->getPDO()->prepare("SELECT * FROM cars");
+                    $stmt->execute();
+                    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
                     $cars = new Cars();
 
@@ -72,7 +74,9 @@ use App\FormCreator;
             <?php
 
             //affiche en fonction de la base de données les utilisateurs du site à savoir les employés dans ce cas
-            $data = $db->query('SELECT * FROM users');
+            $stmt = $db->getPDO()->prepare("SELECT * FROM users");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
             $users = new Users();
 

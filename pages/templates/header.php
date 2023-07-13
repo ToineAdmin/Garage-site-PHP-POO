@@ -30,7 +30,7 @@
 
 
   <div class="container fixed-top">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
       <div class="col-md-3 mb-2 mb-md-0">
         <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
           <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap">
@@ -56,22 +56,22 @@
         ?>
       </nav>
       <div class="col-md-3 text-end">
-    <?php
+        <?php
 
-    // CHANGEMENT DE BUTTON SI CONNECTE OU NON CONNECTE
-    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-        // Si connecté 
-        echo '<form action="../pages/logout.php" method="post">';
-        echo '<button type="submit" class="btn btn-outline-primary me-2">Se déconnecter</button>';
-        echo '</form>';
-    } else {
-        // Si non connecté
-        echo '<form action="../pages/login.php" method="get">';
-        echo '<button type="submit" class="btn btn-outline-primary me-2">Connectez-vous</button>';
-        echo '</form>';
-    }
-    ?>
-</div>
+        // CHANGEMENT DE BUTTON SI CONNECTE OU NON CONNECTE
+        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+          // Si connecté 
+          echo '<form action="../pages/logout.php" method="post">';
+          echo '<button type="submit" class="btn btn-outline-primary me-2">Se déconnecter</button>';
+          echo '</form>';
+        } else {
+          // Si non connecté
+          echo '<form action="../pages/login.php" method="get">';
+          echo '<button type="submit" class="btn btn-outline-primary me-2">Connectez-vous</button>';
+          echo '</form>';
+        }
+        ?>
+      </div>
 
 
     </header>
