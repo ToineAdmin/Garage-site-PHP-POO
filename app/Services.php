@@ -15,13 +15,13 @@ class Services{
         </div>';
 
     }
-
-    public function addServices(){
+    // AJOUT DE SERVICE DANS BACKOFFICE.PHP
+    // public function addServices(){
         
-        if (isset($_POST['addService']) && $_POST['addService'] < 25){
+    //     if (isset($_POST['addService']) && $_POST['addService'] < 25){
 
-        }
+    //     }
 
-    } 
+    // } 
 
 }

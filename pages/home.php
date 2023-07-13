@@ -31,8 +31,9 @@ use App\FormCreator;
             <div class="row align-items-md-stretch">
                 <?php
 
-                $data = $db->query('SELECT * FROM services');
-
+                $stmt = $db->getPDO()->prepare("SELECT * FROM services");
+                $stmt->execute();
+                $data = $stmt->fetchAll(PDO::FETCH_OBJ);
                 $services = new Services();
 
                 foreach ($data as $row) {
@@ -109,13 +110,13 @@ use App\FormCreator;
                 $email = $_POST['email'];
                 $message = $_POST['message'];
 
-                // Créer une instance du formulaire de contact
+
                 $contactForm = new ContactForm($name, $email, $message);
 
                 // Sécuriser les inputs
-                $name = $contactForm->sanitizeInput($name);
-                $email = $contactForm->sanitizeInput($email);
-                $message = $contactForm->sanitizeInput($message);
+                $name = $contactForm->clearInput($name);
+                $email = $contactForm->clearInput($email);
+                $message = $contactForm->clearInput($message);
 
                 // Traiter le formulaire
                 $contactForm->processForm();

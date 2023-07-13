@@ -56,10 +56,23 @@
         ?>
       </nav>
       <div class="col-md-3 text-end">
-        <form action="../pages/login.php" method="get">
-          <button type="submit" class="btn btn-outline-primary me-2">Connectez vous</button>
-        </form>
-      </div>
+    <?php
+
+    // CHANGEMENT DE BUTTON SI CONNECTE OU NON CONNECTE
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+        // Si connecté 
+        echo '<form action="../pages/logout.php" method="post">';
+        echo '<button type="submit" class="btn btn-outline-primary me-2">Se déconnecter</button>';
+        echo '</form>';
+    } else {
+        // Si non connecté
+        echo '<form action="../pages/login.php" method="get">';
+        echo '<button type="submit" class="btn btn-outline-primary me-2">Connectez-vous</button>';
+        echo '</form>';
+    }
+    ?>
+</div>
+
 
     </header>
   </div>

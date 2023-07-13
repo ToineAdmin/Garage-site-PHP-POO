@@ -22,7 +22,7 @@ class Database{
     }
 
     //Methode pour conexion à la base de donnée
-    private function getPDO(){
+    public function getPDO(){
 
         if($this->pdo === null){
             $pdo = new PDO('mysql:dbname=db_garage;host=localhost', 'root', '');
@@ -38,7 +38,7 @@ class Database{
         $data = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $data;
     }
-
+    //METHODE POUR INSERTION A FAIRE
     // public function insertInto($insertion){
     //     $insertion = $_POST;
     //     $stmt = $this->getPDO()->

@@ -24,7 +24,7 @@ class FormCreator {
         $form .= '<label for="' . $name . '" class="form-label">' . $label . '</label>';
     
         if ($type === 'text') {
-          $form .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control mb-3" required>';
+          $form .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control mb-3" autocomplete="off" required>'; // avec argument autocomplete ="off" à changer si nécessaire
         } elseif ($type === 'email') {
           $form .= '<input type="email" name="' . $name . '" id="' . $name . '" class="form-control mb-3" required>';
         } elseif ($type === 'textarea') {
@@ -40,6 +40,13 @@ class FormCreator {
       $form .= '</form>';
     
       return $form;
+    }
+    
+    public function clearInput($input) {
+      $input = trim($input);
+      $input = stripslashes($input);
+      $input = htmlspecialchars($input);
+      return $input;
     }
     
   }

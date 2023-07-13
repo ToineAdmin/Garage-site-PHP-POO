@@ -17,19 +17,19 @@ class ContactForm extends FormCreator {
     public function validate() {
       // Vérifier si les champs requis sont vides
       if (empty($this->name) || empty($this->email) || empty($this->message)) {
-        return false; // Les champs sont vides, la validation échoue
+        return false; 
       }
   
       // Vérifier si l'adresse e-mail est valide
       if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-        return false; // L'adresse e-mail n'est pas valide, la validation échoue
+        return false; 
       }
   
-      return true; // La validation réussit
+      return true; // SI les deux if sont ok
     }
   
     public function sendEmail() {
-      // Construction du contenu de l'e-mail
+      // Construction de l'email
       $to = 'gouzi974@gmail.com';
       $subject = 'Nouveau message de contact';
       $message = "Nom : " . $this->name . "\n";
@@ -53,11 +53,5 @@ class ContactForm extends FormCreator {
       }
     }
   
-    public function sanitizeInput($input) {
-      $input = trim($input);
-      $input = stripslashes($input);
-      $input = htmlspecialchars($input);
-      return $input;
-    }
   }
 ?>
