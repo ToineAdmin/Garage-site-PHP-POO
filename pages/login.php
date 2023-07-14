@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php
             // Afficher le formulaire de connexion
-            echo $loginForm->generateForm('Se connecter');
+            echo $loginForm->generateForm('conectBtn','Se connecter');
             ?>
         </div>
     </div>

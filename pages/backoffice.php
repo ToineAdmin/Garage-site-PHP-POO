@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require '../pages/templates/header.php';
 
 use App\Database;
+use App\Users;
 
 $db = new Database('db_garage');
 
@@ -24,12 +25,88 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
     $carsStmt->execute();
     $carsData = $carsStmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Formulaire pour ajouter un utilisateur
+    $userForm = new \App\FormCreator();
+    $userForm->addField('username', 'text', 'Nom d\'utilisateur');
+    $userForm->addField('password', 'password', 'Définir le mot de passe');
+    $userForm->addField('role', 'text', 'Rôle (1 pour admin / 2 pour employé)');
+    $addUserForm = $userForm->generateForm('addUser', 'Ajouter',true);
+
+    // FORMULAIRE MODIFIER SI AJOUT MODIFIER CLIC
+    $editUserForm = '';
+    $userId = null;
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editUser'])) {
+        if (isset($_POST['userId'])) {
+            var_dump($_POST);
+            $userId = $_POST['userId'];
+
+            // Récupérer les données de l'utilisateur à modifier
+            $userStmt = $db->getPDO()->prepare("SELECT * FROM users WHERE id = :id");
+            $userStmt->bindParam(':id', $userId);
+            $userStmt->execute();
+            $userData = $userStmt->fetch(PDO::FETCH_ASSOC);
+
+            // Générer le formulaire de modification pré-rempli avec les données actuelles de l'utilisateur
+            $userForm->setValues($userData);
+
+            $editUserForm = $userForm->generateForm('updateUser', 'Modifier', false);
+        }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['addUser'])) {
+            $username = $userForm->clearInput($_POST['username']);
+            $password = $userForm->clearInput($_POST['password']);
+            $role = $userForm->clearInput($_POST['role']);
+
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // Appel de la méthode addUser de la classe Users pour ajouter l'utilisateur à la base de données
+            $user = new Users($db);
+            $user->addUser($username, $hashedPassword, $role);
+
+            // Redirection vers la page actuelle pour actualiser les données après l'ajout de l'utilisateur
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        } elseif (isset($_POST['updateUser'])) {
+            $userId = $_POST['userId'];
+            $username = $userForm->clearInput($_POST['username']);
+            $password = $userForm->clearInput($_POST['password']);
+            $role = $userForm->clearInput($_POST['role']);
+
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // Appel de la méthode updateUser de la classe Users pour mettre à jour l'utilisateur dans la base de données
+            $user = new Users($db);
+            $user->updateUser($userId, $username, $hashedPassword, $role);
+
+            // Redirection vers la page actuelle pour actualiser les données après la modification de l'utilisateur
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        }
+    }
+
+
+
+    // SUPPRESSION BDD
+    // Formulaire suppresion soumis ?
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteUser'])) {
+        if (isset($_POST['userId'])) {
+            $userId = $_POST['userId'];
+
+            // Supprime l'utilisateur de la base de données en utilisant l'ID récupéré
+            $user = new Users($db);
+            $user->deleteUser($userId);
+
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        }
+    }
 ?>
 
-
     <main>
-        <!-- Tableau des utilisateur !-->
-
+        <!-- Tableau des utilisateurs -->
         <section class="container my-5">
             <h2>Utilisateurs</h2>
             <table class="table">
@@ -50,29 +127,39 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
                                 <?php endif; ?>
                             <?php endforeach; ?>
                             <td>
-                                <button class="btn btn-primary" onclick="modifierUtilisateur(<?php echo $user['id']; ?>)">Modifier</button>
-                                <button class="btn btn-danger" onclick="supprimerUtilisateur(<?php echo $user['id']; ?>)">Supprimer</button>
+                                <form action="" method="post" style="display: inline;">
+                                    <input type="hidden" name="userId" value="<?php echo $user['id']; ?>">
+                                    <button type="submit" class="btn btn-primary" name="editUser">Modifier</button>
+                                </form>
+                                <form action="" method="post" style="display: inline;">
+                                    <input type="hidden" name="userId" value="<?php echo $user['id']; ?>">
+                                    <button type="submit" class="btn btn-danger" name="deleteUser">Supprimer</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-
                 </tbody>
             </table>
-            <?php
-            // Formulaire pour ajouter un utilisateur
-            $userForm = new \App\FormCreator();
-            $userForm->addField('username', 'text', 'Nom d\'utilisateur');
-            $userForm->addField('password', 'password', 'Définir le mot de passe');
-            $userForm->addField('role', 'text', 'Rôle (1 pour admin / 2 pour employé)');
-            $addUserForm = $userForm->generateForm('Ajouter');
-            ?>
+
             <div class="card card-body w-25 m-auto">
-                <h5>Ajouter un utilisateur</h5>
-                <?php echo $addUserForm ?>
+                <?php if (empty($editUserForm)) : ?>
+                    <h5>Ajouter un utilisateur</h5>
+                    <form action="" method="post">
+                        <?php echo $addUserForm; ?>
+                    </form>
+                <?php else : ?>
+                    <h5>Modifier un utilisateur</h5>
+                        <form method="POST" action="">
+                        <?php
+                        echo $userForm->generateForm('updateUser', 'Modifier', false);
+                        ?>
+                        <input type="hidden" name="userId" value="<?php echo $userData['id']; ?>">
+                        </form>
+
+                <?php endif; ?>
             </div>
+
         </section>
-
-
         <!-- Tableau des services -->
 
 
@@ -113,7 +200,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
                 $serviceForm = new \App\FormCreator();
                 $serviceForm->addField('name', 'text', 'Nom du service');
                 $serviceForm->addField('description', 'textarea', 'Description');
-                $addServiceForm = $serviceForm->generateForm('Ajouter');
+                $addServiceForm = $serviceForm->generateForm('addService', 'Ajouter',true);
                 ?>
 
                 <div class="card card-body w-25 m-auto">
@@ -170,7 +257,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
             $carForm->addField('caracteristics', 'textarea', 'Caractéristiques');
             $carForm->addField('equipments', 'textarea', 'Equipements');
             $carForm->addField('image', 'image', 'image', true);
-            $addCarForm = $carForm->generateForm('Ajouter');
+            $addCarForm = $carForm->generateForm('addCar', 'Ajouter',true);
             ?>
             <div class="card card-body w-50 m-auto">
                 <h2>Ajouter une voiture</h2>
@@ -182,7 +269,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
 
 <?php
 
-} else {
+} else { // rajouter elseif role= employe qu'est ce qu'on affiche 
     header('Location: ../pages/login.php');
     exit;
 }

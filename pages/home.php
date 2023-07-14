@@ -73,21 +73,22 @@ use App\FormCreator;
             <h2 class="text-center mb-lg-5 mt-lg-5">Qui sommes nous ?</h2>
             <?php
 
-            //affiche en fonction de la base de données les utilisateurs du site à savoir les employés dans ce cas
-            $stmt = $db->getPDO()->prepare("SELECT * FROM users");
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+            // Créez une instance de la classe Users en passant l'objet Database
+            $users = new Users($db); //$db intancié dans index.php
 
-            $users = new Users();
+            // Récupérez tous les utilisateurs
+            $allUsers = $users->getAllUsers();
 
-            foreach ($data as $row) {
-                $username = $row->username;
-                $users->displayUsers($username);
+            // Parcourez les utilisateurs et affichez-les
+            foreach ($allUsers as $user) {
+                $username = $user['username'];
+                echo $users->displayUsers($username);
             }
 
             ?>
         </div>
     </section>
+
 
 
     <section class="container" id="contact">
@@ -105,7 +106,7 @@ use App\FormCreator;
             $contactForm->addField('message', 'textarea', 'Message :');
 
             // Afficher le formulaire de contact
-            echo $contactForm->generateForm('Envoyez');
+            echo $contactForm->generateForm('messBtn', 'Envoyer');
 
             // Traitement du formualire
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
