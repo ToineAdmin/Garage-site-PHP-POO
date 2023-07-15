@@ -2,15 +2,14 @@
 
 $title = 'Garage V.PARROT';
 require_once __DIR__ . '/../Templates/header.php';
+use App\Models\Cars;
+use App\Models\Services;
+use App\Models\UserModel;
+use App\Models\ContactForm;
+use App\Models\FormCreator;
 
 // Autres instructions et utilisations de classes
 
-
-use App\Models\Cars;
-use App\Models\Users;
-use App\Models\Services;
-use App\Models\ContactForm;
-use App\Models\FormCreator;
 ?>
 <main>
     <section class="py-5 text-center container" id="home">
@@ -73,7 +72,7 @@ use App\Models\FormCreator;
             <?php
 
             // Créez une instance de la classe Users en passant l'objet Database
-            $users = new Users($db); //$db intancié dans index.php
+            $users = new UserModel($db); //$db intancié dans index.php
 
             // Récupérez tous les utilisateurs
             $allUsers = $users->getAllUsers();
@@ -133,6 +132,8 @@ use App\Models\FormCreator;
 </main>
 
 <?php
+
+
 
 
 
