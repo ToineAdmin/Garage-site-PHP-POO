@@ -1,27 +1,24 @@
 <?php
+
+namespace Public\Index;
 require_once __DIR__ . '/../vendor/autoload.php';
-
-use App\Database;
-
-
-
-if (isset($_GET['p'])) {
-    $p = $_GET['p'];
-} else {
-    $p = 'home';
-}
+use App\Models\Database;
 
 
 
-// Instance de la base de données pour l'utilisé dans la page
+
+$p = isset($_GET['p']) ? $_GET['p'] : 'home';
+
+// Instance de la base de données pour l'utiliser dans la page
 $db = new Database('db_garage');
 
-
 if ($p === 'home') {
-    require '../pages/home.php';
-} else if ($p === 'login') {
-    require '../pages/login.php';
-};
+    require '../app/Views/pages/home.php';
+
+    // Gérer les autres cas ou les valeurs de p spécifiques
+    // par exemple, vous pouvez afficher une page d'erreur ou une redirection par défaut.
+}
+
 
 // $db = new Database('db_garage');
 // $data = $db->query('INSERT INTO users(username) VALUES (users'); 

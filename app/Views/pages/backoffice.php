@@ -1,10 +1,12 @@
 <?php
 session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
-require '../pages/templates/header.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../Templates/header.php';
 
-use App\Database;
-use App\Users;
+use App\Models\Users;
+use App\Models\Database;
+use App\Models\FormCreator;
+
 
 $db = new Database('db_garage');
 
@@ -26,7 +28,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
     $carsData = $carsStmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Formulaire pour ajouter un utilisateur
-    $userForm = new \App\FormCreator();
+    $userForm = new FormCreator();
     $userForm->addField('username', 'text', 'Nom d\'utilisateur');
     $userForm->addField('password', 'password', 'Définir le mot de passe');
     $userForm->addField('role', 'text', 'Rôle (1 pour admin / 2 pour employé)');
@@ -197,7 +199,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
                 // Formulaire pour ajouter un service
 
 
-                $serviceForm = new \App\FormCreator();
+                $serviceForm = new FormCreator();
                 $serviceForm->addField('name', 'text', 'Nom du service');
                 $serviceForm->addField('description', 'textarea', 'Description');
                 $addServiceForm = $serviceForm->generateForm('addService', 'Ajouter',true);
@@ -248,7 +250,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
             </table>
             <?php
             // Formulaire pour ajouter une voiture
-            $carForm = new \App\FormCreator();
+            $carForm = new FormCreator();
             $carForm->addField('name', 'text', 'Nom de la voiture');
             $carForm->addField('brand', 'text', 'Marque');
             $carForm->addField('year', 'text', 'Année de circulation');
@@ -268,6 +270,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION[
 
 
 <?php
+
+
 
 } else { // rajouter elseif role= employe qu'est ce qu'on affiche 
     header('Location: ../pages/login.php');

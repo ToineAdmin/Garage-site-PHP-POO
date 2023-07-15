@@ -1,10 +1,15 @@
 <?php
-session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
-require '../pages/templates/header.php';
 
-use App\Database;
-use App\FormCreator;
+use App\Models\Database;
+use App\Models\FormCreator;
+
+require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../Templates/header.php';
+
+// Autres instructions et utilisations de classes
+
+// Démarrer la session
+session_start();
 
 // Créer formulaire loginForm
 $loginForm = new FormCreator();
@@ -24,8 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-
-    // Traitement du formualaire de connection
+    // Traitement du formulaire de connexion
     if (!empty($users)) {
         $user = $users[0];
         if (password_verify($password, $user->password)) {
@@ -69,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php
             // Afficher le formulaire de connexion
-            echo $loginForm->generateForm('conectBtn','Se connecter');
+            echo $loginForm->generateForm('conectBtn', 'Se connecter');
             ?>
         </div>
     </div>

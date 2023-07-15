@@ -1,6 +1,5 @@
 <?php
-namespace App;
-
+namespace App\Models;
 
 
 class ContactForm extends FormCreator {

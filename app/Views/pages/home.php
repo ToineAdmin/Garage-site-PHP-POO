@@ -1,17 +1,16 @@
 <?php
+
 $title = 'Garage V.PARROT';
-require '../pages/templates/header.php';
-require_once __DIR__ . '/../public/index.php';
+require_once __DIR__ . '/../Templates/header.php';
 
-use App\Cars;
-use App\Users;
-use App\Services;
-use App\ContactForm;
-use App\FormCreator;
+// Autres instructions et utilisations de classes
 
 
-
-
+use App\Models\Cars;
+use App\Models\Users;
+use App\Models\Services;
+use App\Models\ContactForm;
+use App\Models\FormCreator;
 ?>
 <main>
     <section class="py-5 text-center container" id="home">
@@ -136,5 +135,6 @@ use App\FormCreator;
 <?php
 
 
-require '../pages/templates/footer.php';
+
+require_once '../app/Views/Templates/footer.php';
 ?>

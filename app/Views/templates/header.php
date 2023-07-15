@@ -1,3 +1,11 @@
+<?php
+
+namespace App\Views\Templates;
+
+$currentFile = basename($_SERVER['PHP_SELF']);
+
+?>
+
 <!doctype html>
 <html lang="fr" data-bs-theme="auto">
 
@@ -40,13 +48,25 @@
       </div>
       <nav>
         <?php
-        $menuItems = array(
-          'Accueil' => '../public/index.php#home',
-          'Services' => '../public/index.php#services',
-          'Occasions' => '../public/index.php#occasions',
-          'Qui sommes nous?' => '../public/index.php#about',
-          'Contact' => '../public/index.php#contact'
-        );
+        $currentFile = basename($_SERVER['PHP_SELF']);
+
+        if ($currentFile === 'login.php') {
+          $menuItems = array(
+            'Accueil' => '../../../public/index.php#home',
+            'Services' => '../../../public/index.php#services',
+            'Occasions' => '../../../public/index.php#occasions',
+            'Qui sommes nous?' => '../../../public/index.php#about',
+            'Contact' => '../../../public/index.php#contact'
+          );
+        } else {
+          $menuItems = array(
+            'Accueil' => '../public/index.php#home',
+            'Services' => '../public/index.php#services',
+            'Occasions' => '../public/index.php#occasions',
+            'Qui sommes nous?' => '../public/index.php#about',
+            'Contact' => '../public/index.php#contact'
+          );
+        }
 
         echo '<ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">';
         foreach ($menuItems as $label => $url) {
@@ -54,23 +74,25 @@
         }
         echo '</ul>';
         ?>
+
       </nav>
       <div class="col-md-3 text-end">
         <?php
 
         // CHANGEMENT DE BUTTON SI CONNECTE OU NON CONNECTE
+
         if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-          // Si connecté 
-          echo '<form action="../pages/logout.php" method="post">';
-          echo '<button type="submit" class="btn btn-outline-primary me-2">Se déconnecter</button>';
-          echo '</form>';
+          // Si connecté
+          echo '<form action="logout.php" method="post">';
         } else {
           // Si non connecté
-          echo '<form action="../pages/login.php" method="get">';
-          echo '<button type="submit" class="btn btn-outline-primary me-2">Connectez-vous</button>';
-          echo '</form>';
+          echo '<form action="' . ($currentFile === 'login.php' ? 'login.php' : '../app/Views/pages/login.php') . '" method="get">';
         }
+
+        echo '<button type="submit" class="btn btn-outline-primary me-2">' . (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true ? 'Se déconnecter' : 'Connectez-vous') . '</button>';
+        echo '</form>';
         ?>
+
       </div>
 
 
