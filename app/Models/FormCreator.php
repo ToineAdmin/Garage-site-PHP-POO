@@ -16,13 +16,6 @@ class FormCreator
     ];
   }
 
-  public function clearValues()
-  {
-    foreach ($this->fields as $fieldName => $field) {
-      $this->fields[$fieldName]['value'] = '';
-    }
-  }
-
   public function setValues($values)
   {
     foreach ($this->fields as &$field) {

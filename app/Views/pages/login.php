@@ -14,44 +14,6 @@ $loginController = new LoginController($loginModel);
 $form = $loginController->index();
 $loginForm = $form['loginForm'];
 
-
-
-// // Vérifier si le formulaire est soumis
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     $username = isset($_POST['username']) ? $loginForm->clearInput($_POST['username']) : '';
-//     $password = isset($_POST['password']) ? $loginForm->clearInput($_POST['password']) : '';
-
-
-
-//     // Traitement du formulaire de connexion
-//     if (!empty($users)) {
-//         $user = $users[0];
-//         if (password_verify($password, $user->password)) {
-//             if ($user->role == 1) {
-//                 // Utilisateur administrateur
-//                 $_SESSION['loggedin'] = true;
-//                 $_SESSION['role'] = 'admin';
-//                 $_SESSION['username'] = $username;
-//                 CookieManager::setLoggedInCookie($username);
-//             } else {
-//                 // Utilisateur employé
-//                 $_SESSION['loggedin'] = true;
-//                 $_SESSION['role'] = 'employee';
-//                 $_SESSION['username'] = $username;
-//                 CookieManager::setLoggedInCookie($username);
-//             }
-
-//             header('Location: backoffice.php');
-//             exit();
-//         }
-//     }
-
-//     echo 'Identifiants incorrects. Veuillez réessayer.';
-// }
-
-
-
-
 $loginController->processLoginForm();
 ?>
 
@@ -78,7 +40,6 @@ $loginController->processLoginForm();
             <?php if (isset($loginController) && !empty($loginController->getErrorMessage())) : ?>
                 <div class="alert alert-danger"><?php echo $loginController->getErrorMessage(); ?></div>
             <?php endif; ?>
-
         </div>
     </div>
 </main>

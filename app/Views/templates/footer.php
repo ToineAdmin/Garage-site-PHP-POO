@@ -22,19 +22,19 @@
     });
 
 
-    //SCRIPT POUR AFFICHER FORMULAIRE DANS LE BACKOFFICE 
-    // Sélectionnez le bouton "Ajouter"
-const btnAddUser = document.querySelector('.btn-add-user');
+//     //SCRIPT POUR AFFICHER FORMULAIRE DANS LE BACKOFFICE 
+//     // Sélectionnez le bouton "Ajouter"
+// const btnAddUser = document.querySelector('.btn-add-user');
 
-// Sélectionnez le formulaire d'ajout d'utilisateur
-const addUserForm = document.querySelector('#add-user-form');
+// // Sélectionnez le formulaire d'ajout d'utilisateur
+// const addUserForm = document.querySelector('#add-user-form');
 
 
-btnAddUser.addEventListener('click', function() {
-    // Affiche le formulaire d'ajout d'utilisateur en modifiant son style d'affichage
-    addUserForm.style.display = 'block';
-    btnAddUser.style.display = 'none';
-});
+// btnAddUser.addEventListener('click', function() {
+//     // Affiche le formulaire d'ajout d'utilisateur en modifiant son style d'affichage
+//     addUserForm.style.display = 'block';
+//     btnAddUser.style.display = 'none';
+// });
 </script>
 
 </script>

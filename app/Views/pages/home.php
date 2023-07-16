@@ -1,5 +1,7 @@
 <?php
+
 use App\Controllers\CookieManager;
+
 
 // Vérifier si l'utilisateur est connecté en utilisant la classe CookieManager
 $isLoggedIn = CookieManager::isLoggedIn();
@@ -14,20 +16,27 @@ if ($isLoggedIn) {
 $title = 'Garage V.PARROT';
 require_once __DIR__ . '/../Templates/header.php';
 
-use App\Models\Cars;
-use App\Models\Services;
 use App\Models\UserModel;
 use App\Models\ContactForm;
 use App\Models\FormCreator;
+use App\Models\ServiceModel;
+
 use App\Controllers\UsersController;
+use App\Controllers\ServicesController;
 
 //Instance des classes
 $userModel = new UserModel($db);
 $usersController = new UsersController($userModel);
 
+$serviceModel = new ServiceModel($db);
+$servicesController = new ServicesController($serviceModel);
+
 //Récupère les données
 $data = $usersController->index();
 $usersData = $data['usersData'];
+
+$serviceData = $servicesController->Serviceindex();
+$servicesData = $serviceData['servicesData'];
 
 ?>
 <main>
@@ -46,18 +55,15 @@ $usersData = $data['usersData'];
     <section id="services">
         <div class="container py-4">
             <div class="row align-items-md-stretch">
-                <?php
-
-                $stmt = $db->getPDO()->prepare("SELECT * FROM services");
-                $stmt->execute();
-                $data = $stmt->fetchAll(PDO::FETCH_OBJ);
-                $services = new Services();
-
-                foreach ($data as $row) {
-                    $serviceName = $row->name;
-                    $services->displayServices($serviceName);
-                }
-                ?>
+                <h2>Nos Services</h2>
+                <?php foreach ($servicesData as $service) : ?>
+                <div class="col-md-6 mb-3">
+                    <div class="h-100 p-5 text-bg-dark rounded-3">
+                        <h2><?php echo $service->name ?></h2>
+                        <p><?php echo $service->description ?></p>
+                    </div>
+                </div>
+                <?php endforeach ?>
             </div>
     </section>
     <section class="container" id="occasions">

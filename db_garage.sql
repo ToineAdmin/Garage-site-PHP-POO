@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS services
 
 INSERT INTO services(name)
 VALUES
-('Réparation'),
-('Entretien'),
-('Contrôle Technique'),
-('Depannage');
+('Réparation', 'Nous faisons tout type de réparations avec soins et professionnalisme.'),
+('Entretien','Une voiture bien entretenue, c\'est une voiture qui dure. Avec nous elles le seront.'),
+('Contrôle Technique', 'Depuis plus de 10ans nous effectuons les contrôles nécessaires à la sécurité de tous.'),
+('Depannage', 'Un service de dépannage 24h/24h, pour que vous ayez l\'esprit tranquille.');
 
 CREATE TABLE IF NOT EXISTS cars
 (

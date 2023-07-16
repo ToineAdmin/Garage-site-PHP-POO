@@ -47,16 +47,13 @@ class UsersController
         return $userForm->generateForm('addUser', 'Ajouter', true);
     }
 
-    private function createEditUserForm($userData)
+    private function createEditUserForm()
     {
         $userForm = new FormCreator();
         $userForm->addField('username', 'text', 'Nom d\'utilisateur');
         $userForm->addField('password', 'password', 'Mot de passe');
         $userForm->addField('role', 'text', 'Rôle');
         $userForm->addField('job', 'text', 'Métier');
-
-        // Pré-remplir les champs avec les données de l'utilisateur
-        $userForm->setValues($userData);
 
         return $userForm->generateForm('updateUser', 'Modifier', true);
     }
@@ -95,7 +92,9 @@ class UsersController
             }
 
             $securedPassword = password_hash($password, PASSWORD_DEFAULT);
+
             $username = ucfirst($username);
+
             $this->userModel->addUser($username, $securedPassword, $role, $job);
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;
@@ -113,6 +112,25 @@ class UsersController
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;
         }
+    }
+
+    public function updateUserSubmit(){
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateUser'])) {
+            $userId = $_POST['userId'];
+            $username = $this->formCreator->clearInput($_POST['username']);
+            $password = $this->formCreator->clearInput($_POST['password']);
+            $role = $this->formCreator->clearInput($_POST['role']);
+            $job = $this->formCreator->clearInput($_POST['job']);
+
+            $securedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+            $this->userModel->updateUser($userId, $username, $securedPassword, $role, $job);
+    
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        }
+
     }
 
     public function getErrorMessage()
