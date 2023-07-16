@@ -3,6 +3,7 @@ session_start();
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../Templates/header.php';
 
+
 use App\Models\Database;
 use App\Models\UserModel;
 use App\Controllers\UsersController;

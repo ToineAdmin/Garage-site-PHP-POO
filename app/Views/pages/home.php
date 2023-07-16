@@ -1,4 +1,15 @@
 <?php
+use App\Controllers\CookieManager;
+
+// Vérifier si l'utilisateur est connecté en utilisant la classe CookieManager
+$isLoggedIn = CookieManager::isLoggedIn();
+
+if ($isLoggedIn) {
+    // Démarrer la session uniquement si l'utilisateur est connecté
+    session_start();
+}
+
+
 
 $title = 'Garage V.PARROT';
 require_once __DIR__ . '/../Templates/header.php';
@@ -128,6 +139,8 @@ $usersData = $data['usersData'];
                 // Traiter le formulaire
                 $contactForm->processForm();
             }
+
+
 
             ?>
 

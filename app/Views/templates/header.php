@@ -2,6 +2,8 @@
 
 namespace App\Views\Templates;
 
+use App\Controllers\CookieManager;
+
 $currentFile = basename($_SERVER['PHP_SELF']);
 
 ?>
@@ -23,12 +25,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
   <link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <!-- Favicons -->
-  <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-  <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
-  <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <link rel="stylesheet" href="../public/css/style.css">
   <meta name="theme-color" content="#712cf9">
@@ -73,28 +69,37 @@ $currentFile = basename($_SERVER['PHP_SELF']);
           echo '<li class="nav-item"><a href="' . $url . '" class="nav-link">' . $label . '</a></li>';
         }
         echo '</ul>';
-
         ?>
 
       </nav>
       <div class="col-md-3 text-end">
         <?php
 
-        // CHANGEMENT DE BUTTON SI CONNECTE OU NON CONNECTE
+        // Vérifier si l'utilisateur est connecté en utilisant la classe CookieManager
+        $isLoggedIn = CookieManager::isLoggedIn();
 
-        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+        // Récupérer le nom du fichier actuel
+        $currentFile = basename($_SERVER['PHP_SELF']);
+
+        // Déterminer l'action du formulaire en fonction de la connexion et du fichier actuel
+        $action = '';
+        if ($isLoggedIn) {
           // Si connecté
-          echo '<form action="logout.php" method="post">';
+          $action = ($currentFile === "backoffice.php") ? 'logout.php' : '../app/Views/pages/logout.php';
         } else {
           // Si non connecté
-          echo '<form action="' . ($currentFile === 'login.php' ? 'login.php' : '../app/Views/pages/login.php') . '" method="get">';
+          $action = ($currentFile === 'login.php') ? 'login.php' : '../app/Views/pages/login.php';
         }
 
-        echo '<button type="submit" class="btn btn-outline-primary me-2">' . (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true ? 'Se déconnecter' : 'Connectez-vous') . '</button>';
+        // Déterminer le libellé du bouton en fonction de la connexion
+        $buttonLabel = ($isLoggedIn) ? 'Se déconnecter' : 'Connectez-vous';
+
+        // Afficher le formulaire
+        echo '<form action="' . $action . '" method="post">';
+        echo '<button type="submit" class="btn btn-outline-primary me-2">' . $buttonLabel . '</button>';
         echo '</form>';
         ?>
 
-      </div>
 
 
     </header>

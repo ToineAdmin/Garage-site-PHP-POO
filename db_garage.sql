@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS users
     job VARCHAR(50) NOT NULL
 );
 
-INSERT INTO users (username, password, role)
+INSERT INTO users (username, password, role, job)
 VALUES
-('Vincent', '$2y$10$Z6UpC2PaWdpTAfSWwntUPeULUviVMQ4xkvU5IazGw.3ieKZbObC.m', 1, Patron),
-('Hubert', '$2y$10$FXHj7innBMbAyeockURn0.stoQ4ekSztrDsdDVv40xELonXC7MqAO', 2, Mécanicien),
-('Jean', '$2y$10$so4QXuzYQVCuIu7SrEjNgeKth3.jpzr0wgBSqeyOb8EGTXQlY1dZq', 2, Mécanicien);
+('Vincent', '$2y$10$Z6UpC2PaWdpTAfSWwntUPeULUviVMQ4xkvU5IazGw.3ieKZbObC.m', 1, 'Patron'),
+('Hubert', '$2y$10$FXHj7innBMbAyeockURn0.stoQ4ekSztrDsdDVv40xELonXC7MqAO', 2, 'Mécanicien'),
+('Jean', '$2y$10$so4QXuzYQVCuIu7SrEjNgeKth3.jpzr0wgBSqeyOb8EGTXQlY1dZq', 2, 'Mécanicien');
 
 CREATE TABLE IF NOT EXISTS services
 (
