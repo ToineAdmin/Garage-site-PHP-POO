@@ -25,7 +25,6 @@ $usersController->addUserSubmit();
 $usersController->deleteUserSubmit();
 
 ?>
-
 <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION['role'] === 'admin') : ?>
 
     <main>

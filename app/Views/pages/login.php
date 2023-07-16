@@ -1,60 +1,58 @@
 <?php
-
-use App\Models\Database;
-use App\Models\FormCreator;
-use App\Controllers\CookieManager;
-
+session_start();
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../Templates/header.php';
 
-// Autres instructions et utilisations de classes
+use App\Models\Database;
+use App\Models\LoginModel;
+use App\Controllers\LoginController;
 
-// Démarrer la session
-session_start();
+$db = new Database('db_garage');
+$loginModel = new LoginModel($db);
+$loginController = new LoginController($loginModel);
 
-// Créer formulaire loginForm
-$loginForm = new FormCreator();
-$loginForm->addField('username', 'text', 'Nom :');
-$loginForm->addField('password', 'password', 'Mot de passe :');
+$form = $loginController->index();
+$loginForm = $form['loginForm'];
 
-// Vérifier si le formulaire est soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = isset($_POST['username']) ? $loginForm->clearInput($_POST['username']) : '';
-    $password = isset($_POST['password']) ? $loginForm->clearInput($_POST['password']) : '';
 
-    // Connection à la DB
-    $db = new Database('db_garage');
 
-    $stmt = $db->getPDO()->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->bindValue(':username', $username);
-    $stmt->execute();
-    $users = $stmt->fetchAll(PDO::FETCH_OBJ);
+// // Vérifier si le formulaire est soumis
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $username = isset($_POST['username']) ? $loginForm->clearInput($_POST['username']) : '';
+//     $password = isset($_POST['password']) ? $loginForm->clearInput($_POST['password']) : '';
 
-    // Traitement du formulaire de connexion
-    if (!empty($users)) {
-        $user = $users[0];
-        if (password_verify($password, $user->password)) {
-            if ($user->role == 1) {
-                // Utilisateur administrateur
-                $_SESSION['loggedin'] = true;
-                $_SESSION['role'] = 'admin';
-                $_SESSION['username'] = $username;
-                CookieManager::setLoggedInCookie($username);
-            } else {
-                // Utilisateur employé
-                $_SESSION['loggedin'] = true;
-                $_SESSION['role'] = 'employee';
-                $_SESSION['username'] = $username;
-                CookieManager::setLoggedInCookie($username);
-            }
 
-            header('Location: backoffice.php');
-            exit();
-        }
-    }
 
-    echo 'Identifiants incorrects. Veuillez réessayer.';
-}
+//     // Traitement du formulaire de connexion
+//     if (!empty($users)) {
+//         $user = $users[0];
+//         if (password_verify($password, $user->password)) {
+//             if ($user->role == 1) {
+//                 // Utilisateur administrateur
+//                 $_SESSION['loggedin'] = true;
+//                 $_SESSION['role'] = 'admin';
+//                 $_SESSION['username'] = $username;
+//                 CookieManager::setLoggedInCookie($username);
+//             } else {
+//                 // Utilisateur employé
+//                 $_SESSION['loggedin'] = true;
+//                 $_SESSION['role'] = 'employee';
+//                 $_SESSION['username'] = $username;
+//                 CookieManager::setLoggedInCookie($username);
+//             }
+
+//             header('Location: backoffice.php');
+//             exit();
+//         }
+//     }
+
+//     echo 'Identifiants incorrects. Veuillez réessayer.';
+// }
+
+
+
+
+$loginController->processLoginForm();
 ?>
 
 <style>
@@ -76,10 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="text-center">
             <h2>Connectez-vous</h2>
 
-            <?php
-            // Afficher le formulaire de connexion
-            echo $loginForm->generateForm('conectBtn', 'Se connecter');
-            ?>
+            <?php echo $loginForm; ?>
+            <?php if (isset($loginController) && !empty($loginController->getErrorMessage())) : ?>
+                <div class="alert alert-danger"><?php echo $loginController->getErrorMessage(); ?></div>
+            <?php endif; ?>
+
         </div>
     </div>
 </main>
