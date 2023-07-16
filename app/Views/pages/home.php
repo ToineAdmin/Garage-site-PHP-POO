@@ -2,13 +2,21 @@
 
 $title = 'Garage V.PARROT';
 require_once __DIR__ . '/../Templates/header.php';
+
 use App\Models\Cars;
 use App\Models\Services;
 use App\Models\UserModel;
 use App\Models\ContactForm;
 use App\Models\FormCreator;
+use App\Controllers\UsersController;
 
-// Autres instructions et utilisations de classes
+//Instance des classes
+$userModel = new UserModel($db);
+$usersController = new UsersController($userModel);
+
+//Récupère les données
+$data = $usersController->index();
+$usersData = $data['usersData'];
 
 ?>
 <main>
@@ -65,27 +73,23 @@ use App\Models\FormCreator;
             </div>
         </div>
     </section>
-
     <section class="container marketing mb-lg-5" id="about">
         <div class="row">
             <h2 class="text-center mb-lg-5 mt-lg-5">Qui sommes nous ?</h2>
-            <?php
-
-            // Créez une instance de la classe Users en passant l'objet Database
-            $users = new UserModel($db); //$db intancié dans index.php
-
-            // Récupérez tous les utilisateurs
-            $allUsers = $users->getAllUsers();
-
-            // Parcourez les utilisateurs et affichez-les
-            foreach ($allUsers as $user) {
-                $username = $user['username'];
-                echo $users->displayUsers($username);
-            }
-
-            ?>
+            <?php foreach ($usersData as $user) : ?>
+                <div class="col-lg-4">
+                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+                    </svg>
+                    <h2 class="fw-normal"><?php echo $user->username ?></h2>
+                    <h5 class="fw-normal"><?php echo $user->job ?></h5>
+                </div>
+            <?php endforeach ?>
         </div>
     </section>
+
+
+
 
 
 

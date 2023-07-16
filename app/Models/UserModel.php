@@ -22,12 +22,13 @@ class UserModel
 
     }
 
-    public function addUser($username, $password, $role)
+    public function addUser($username, $password, $role, $job)
     {
-        $stmt = $this->db->getPDO()->prepare("INSERT INTO users (username, password, role) VALUES (:username, :password, :role)");
+        $stmt = $this->db->getPDO()->prepare("INSERT INTO users (username, password, role, job) VALUES (:username, :password, :role, :job)");
         $stmt->bindValue(':username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':password', $password, PDO::PARAM_STR);
         $stmt->bindValue(':role', $role, PDO::PARAM_INT);
+        $stmt->bindValue(':job', $job, PDO::PARAM_STR);
         $stmt->execute();
     }
 

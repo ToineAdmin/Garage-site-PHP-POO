@@ -50,7 +50,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         <?php
         $currentFile = basename($_SERVER['PHP_SELF']);
 
-        if ($currentFile === 'login.php') {
+        if ($currentFile === 'login.php' || $currentFile === 'backoffice.php') {
           $menuItems = array(
             'Accueil' => '../../../public/index.php#home',
             'Services' => '../../../public/index.php#services',
@@ -73,6 +73,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
           echo '<li class="nav-item"><a href="' . $url . '" class="nav-link">' . $label . '</a></li>';
         }
         echo '</ul>';
+
         ?>
 
       </nav>
@@ -97,4 +98,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 
 
     </header>
+
+
   </div>

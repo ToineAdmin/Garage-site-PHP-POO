@@ -2,6 +2,7 @@
 
 use App\Models\Database;
 use App\Models\FormCreator;
+use App\Controllers\CookieManager;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../Templates/header.php';
@@ -37,10 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Utilisateur administrateur
                 $_SESSION['loggedin'] = true;
                 $_SESSION['role'] = 'admin';
+                $_SESSION['username'] = $username;
+                CookieManager::setLoggedInCookie($username);
             } else {
                 // Utilisateur employé
                 $_SESSION['loggedin'] = true;
                 $_SESSION['role'] = 'employee';
+                $_SESSION['username'] = $username;
+                CookieManager::setLoggedInCookie($username);
             }
 
             header('Location: backoffice.php');
