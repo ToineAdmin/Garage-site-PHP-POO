@@ -1,19 +1,24 @@
 <?php
 session_start();
+
+
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../Templates/header.php';
 
-
+use App\Controllers\MediasController;
 use App\Models\Database;
 use App\Models\UserModel;
 use App\Models\ServiceModel;
 use App\Controllers\UsersController;
 use App\Controllers\ServicesController;
+use App\Models\MediaModel;
 
 //Instance des objets
 $db = new Database('db_garage');
+$mediaModel = new MediaModel($db);
 $userModel = new UserModel($db);
-$usersController = new UsersController($userModel);
+$mediasController = new MediasController($mediaModel);
+$usersController = new UsersController($userModel, $mediaModel, $mediasController);
 
 $serviceModel = new serviceModel($db);
 $servicesController = new servicesController($serviceModel);
@@ -46,7 +51,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-var_dump($targetDir = __DIR__ . '/../../public/img');
 
 
 //affichage des formulaire modif et add
@@ -78,6 +82,13 @@ var_dump($targetDir = __DIR__ . '/../../public/img');
                             <td><?php echo $user->password; ?></td>
                             <td><?php echo $user->role; ?></td>
                             <td><?php echo $user->job; ?></td>
+                            <td>
+                                <?php if (!empty($user->image_path)) : ?>
+                                    <img src="<?php echo $user->image_path; ?>" alt="Photo de profil" width="50"><?php var_dump($user->image_path) ?>
+                                <?php else : ?>
+                                    <span>Aucune image</span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <form action="" method="post" style="display: inline;">
                                     <input type="hidden" name="userId" value="<?php echo $user->id; ?>">
@@ -178,7 +189,7 @@ var_dump($targetDir = __DIR__ . '/../../public/img');
                 echo '<div class="card card-body w-25 m-auto">';
             }
             ?>
-            <?php if ($showAddServiceForm ) : ?>
+            <?php if ($showAddServiceForm) : ?>
                 <h5>Ajouter un services</h5>
                 <?php echo $addServiceForm; ?>
                 <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
@@ -191,7 +202,7 @@ var_dump($targetDir = __DIR__ . '/../../public/img');
             </div>
         </section>
 
-        
+
     </main>
 <?php endif ?>
 

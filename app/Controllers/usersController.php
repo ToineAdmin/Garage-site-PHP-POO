@@ -3,24 +3,31 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\MediaModel;
 use App\Models\FormCreator;
+use App\Controllers\MediasController;
+
 
 class UsersController
 {
     private $userModel;
     private $formCreator;
     private $errorMessage;
+    private $mediaModel;
+    private $mediasController;
 
-    public function __construct(UserModel $userModel)
+    public function __construct(UserModel $userModel, MediaModel $mediaModel, MediasController $mediasController)
     {
         $this->userModel = $userModel;
+        $this->mediaModel = $mediaModel;
+        $this->mediasController = $mediasController;
         $this->formCreator = new FormCreator();
     }
 
     public function index()
     {
         // Récupération des utilisateurs depuis le modèle
-        $usersData = $this->userModel->getAllUsers();
+        $usersData = $this->userModel->getAllUsersWithMedia();
 
         // Création du formulaire d'ajout d'utilisateur
         $addUserForm = $this->createAddUserForm();
@@ -104,31 +111,16 @@ class UsersController
             $userId = $this->userModel->getLastInsertId();
 
             // Gérer le téléchargement de l'image
-            $this->uploadImage($userId);
+            $this->mediasController->uploadImage($userId);
 
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;
         }
     }
 
-    public function uploadImage($userId)
-    {
-        if(isset($_FILES['img'])){
-            $targetDirectory = __DIR__ . "/../../public/img/";
-            $targetFile = $targetDirectory . basename($_FILES['img']['name']);
-            $imageFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
-    
-            // Vérifie si le fichier est une image
-            $check = getimagesize($_FILES['img']['tmp_name']);
-            if($check !== false) {
-                // Déplace le fichier téléversé dans le dossier approprié
-                move_uploaded_file($_FILES['img']['tmp_name'], $targetFile);
-            } else {
-                // Le fichier téléversé n'est pas une image valide
-            }
-        }
-    }
-    
+
+
+
 
 
 

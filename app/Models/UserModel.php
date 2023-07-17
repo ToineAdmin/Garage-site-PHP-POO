@@ -19,8 +19,15 @@ class UserModel
         $stmt = $this->db->getPDO()->prepare("SELECT * FROM users");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
-
     }
+
+    public function getAllUsersWithMedia()
+    {
+        $sql = "SELECT u.*, m.path AS image_path FROM users u LEFT JOIN media m ON u.id = m.user_id";
+        $stmt = $this->db->getPDO()->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
 
     public function addUser($username, $password, $role, $job)
     {
@@ -57,25 +64,21 @@ class UserModel
 
 
     public function checkUsername($username)
-{
+    {
 
-    // Exécutez la requête avec le nom d'utilisateur en tant que paramètre
-    $stmt = $this->db->getPDO()->prepare("SELECT COUNT(*) as count FROM users WHERE username = :username");
-    $stmt->bindValue(':username', $username);
-    $stmt->execute();
+        // Exécutez la requête avec le nom d'utilisateur en tant que paramètre
+        $stmt = $this->db->getPDO()->prepare("SELECT COUNT(*) as count FROM users WHERE username = :username");
+        $stmt->bindValue(':username', $username);
+        $stmt->execute();
 
-    // Récupérez le résultat de la requête
-    $result = $stmt->fetch();
+        // Récupérez le résultat de la requête
+        $result = $stmt->fetch();
 
-    // Vérifiez si le nombre d'enregistrements retourné est supérieur à 0
-    if ($result['count'] > 0) {
-        return true; // Le nom d'utilisateur existe déjà
-    } else {
-        return false; // Le nom d'utilisateur n'existe pas
+        // Vérifiez si le nombre d'enregistrements retourné est supérieur à 0
+        if ($result['count'] > 0) {
+            return true; // Le nom d'utilisateur existe déjà
+        } else {
+            return false; // Le nom d'utilisateur n'existe pas
+        }
     }
-}
-
-
-
-
 }

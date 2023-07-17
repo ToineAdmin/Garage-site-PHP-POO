@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS services
     description VARCHAR(255) NOT NULL
 );
 
-INSERT INTO services(name)
+INSERT INTO services(name, description)
 VALUES
 ('Réparation', 'Nous faisons tout type de réparations avec soins et professionnalisme.'),
 ('Entretien','Une voiture bien entretenue, c\'est une voiture qui dure. Avec nous elles le seront.'),
