@@ -56,36 +56,36 @@ class MediaModel
 
 
 
-    public function addCarImg($name, $path, $carId)
-    {
-        $stmt = $this->db->getPDO()->prepare("INSERT INTO media (name, path, car_id) VALUES (:name, :path, :carId)");
-        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-        $stmt->bindValue(':path', $path, PDO::PARAM_STR);
-        $stmt->bindValue(':carid', $carId, PDO::PARAM_INT);
-        $stmt->execute();
-    }
+//     public function addCarImg($name, $path, $carId)
+//     {
+//         $stmt = $this->db->getPDO()->prepare("INSERT INTO media (name, path, car_id) VALUES (:name, :path, :carId)");
+//         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+//         $stmt->bindValue(':path', $path, PDO::PARAM_STR);
+//         $stmt->bindValue(':carid', $carId, PDO::PARAM_INT);
+//         $stmt->execute();
+//     }
 
-    public function getCarImg($carId)
-    {
-        $stmt = $this->db->getPDO()->prepare("SELECT * FROM media WHERE car_id = :carId");
-        $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_OBJ);
-    }
+//     public function getCarImg($carId)
+//     {
+//         $stmt = $this->db->getPDO()->prepare("SELECT * FROM media WHERE car_id = :carId");
+//         $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
+//         $stmt->execute();
+//         return $stmt->fetch(PDO::FETCH_OBJ);
+//     }
 
-    public function updateCarImg($imageName, $imagePath, $carId)
-    {
-        $stmt = $this->db->getPDO()->prepare("UPDATE users SET image_name = :imageName, image_path = :imagePath WHERE id = :carId");
-        $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
-        $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
-        $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
-        $stmt->execute();
-    }
+//     public function updateCarImg($imageName, $imagePath, $carId)
+//     {
+//         $stmt = $this->db->getPDO()->prepare("UPDATE users SET image_name = :imageName, image_path = :imagePath WHERE id = :carId");
+//         $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
+//         $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
+//         $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
+//         $stmt->execute();
+//     }
 
-    public function deleteCarImg($carId)
-    {
-        $stmt = $this->db->getPDO()->prepare("DELETE FROM media WHERE user_id = :carId");
-        $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
-        $stmt->execute();
-    }
+//     public function deleteCarImg($carId)
+//     {
+//         $stmt = $this->db->getPDO()->prepare("DELETE FROM media WHERE user_id = :carId");
+//         $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
+//         $stmt->execute();
+//     }
 }

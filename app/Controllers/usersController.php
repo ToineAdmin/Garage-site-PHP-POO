@@ -136,7 +136,7 @@ class UsersController
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateUser'])) {
-            $userId = $_POST['userId'];
+            $userId = $_POST['userId'] ; 
             $username = $this->formCreator->clearInput($_POST['username']);
             $password = $this->formCreator->clearInput($_POST['password']);
             $role = $this->formCreator->clearInput($_POST['role']);

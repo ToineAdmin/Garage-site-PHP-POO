@@ -123,6 +123,8 @@ error_reporting(E_ALL);
                 </tbody>
             </table>
 
+
+
             <?php if (isset($usersController) && !empty($usersController->getErrorMessage())) : ?>
                 <div class="alert alert-danger"><?php echo $usersController->getErrorMessage(); ?></div>
             <?php endif; ?>
@@ -131,8 +133,6 @@ error_reporting(E_ALL);
             <form action="" method="POST">
                 <button type="submit" class="btn btn-primary" name="addUsers">Ajouter</button>
             </form>
-
-
             <?php
             $showAddUserForm = '';
             if (isset($_POST['addUsers'])) {
@@ -140,7 +140,15 @@ error_reporting(E_ALL);
                 echo '<div class="card card-body w-25 m-auto">';
             } else if (isset($_POST['editUser'])) {
                 $showAddUserForm = false;
-                echo '<div class="card card-body w-25 m-auto">';
+                foreach ($_POST as $key => $value) {
+                    if (strpos($key, 'editUser_') !== false) {
+                        $userId = explode('_', $key)[1];
+                        // Utilisez $userId pour effectuer les opérations nécessaires pour le formulaire de modification de l'utilisateur correspondant
+                        // ...
+                        break; // Sortir de la boucle une fois que l'ID de l'utilisateur est trouvé
+                    }
+                    echo '<div class="card card-body m-auto">';
+                }
             }
             ?>
             <?php if ($showAddUserForm) : ?>
@@ -150,10 +158,10 @@ error_reporting(E_ALL);
             <?php elseif ($showAddUserForm === false) : ?>
                 <h5>Modifier un utilisateur</h5>
                 <?php echo $editUserForm; ?>
-                <input type="hidden" name="userId" value="<?php echo $user->id; ?>">
+                <input type="hidden" name="userId" value="<?php echo $_POST['userId']; ?>">
                 <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
             <?php endif; ?>
-            </div>
+
         </section>
 
 
@@ -205,6 +213,12 @@ error_reporting(E_ALL);
                 echo '<div class="card card-body w-25 m-auto">';
             } else if (isset($_POST['editService'])) {
                 $showAddServiceForm = false;
+                foreach ($_POST as $key => $value) {
+                    if (strpos($key, 'editService_') !== false) {
+                        $ServiceId = explode('_', $key)[1];
+                        break;
+                    }
+                }
                 echo '<div class="card card-body w-25 m-auto">';
             }
             ?>
@@ -215,7 +229,7 @@ error_reporting(E_ALL);
             <?php elseif ($showAddServiceForm === false) : ?>
                 <h5>Modifier un service</h5>
                 <?php echo $editServiceForm; ?>
-                <input type="hidden" name="serviceId" value="<?php echo $service->id; ?>">
+                <input type="hidden" name="serviceId" value="<?php echo $_POST['serviceId']; ?>">
                 <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
             <?php endif; ?>
             </div>
@@ -259,7 +273,7 @@ error_reporting(E_ALL);
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <form action="" method="post" style="display: inline;">
+                                <form action="" method="post" id="myForm" style="display: inline;">
                                     <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
                                     <button type="submit" class="btn btn-primary" name="editCar">Modifier</button>
                                 </form>
@@ -281,8 +295,6 @@ error_reporting(E_ALL);
             <form action="" method="POST">
                 <button type="submit" class="btn btn-primary" name="addCars">Ajouter</button>
             </form>
-
-
             <?php
             $showAddCarForm = '';
             if (isset($_POST['addCars'])) {
@@ -290,6 +302,12 @@ error_reporting(E_ALL);
                 echo '<div class="card card-body w-50 m-auto">';
             } else if (isset($_POST['editCar'])) {
                 $showAddCarForm = false;
+                foreach ($_POST as $key => $value) {
+                    if (strpos($key, 'editCar_') !== false) {
+                        $carId = explode('_', $key)[1];
+                        break;
+                    }
+                }
                 echo '<div class="card card-body w-50 m-auto">';
             }
             ?>
@@ -300,14 +318,15 @@ error_reporting(E_ALL);
             <?php elseif ($showAddCarForm === false) : ?>
                 <h5>Modifier une voiture</h5>
                 <?php echo $editCarForm; ?>
-                <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
+                <input type="hidden" name="carId" value="<?php echo $_POST['carId']; ?>">
                 <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
             <?php endif; ?>
             </div>
         </section>
-
-
     </main>
+
+
+
 <?php endif ?>
 
 <?php
