@@ -84,7 +84,7 @@ error_reporting(E_ALL);
                             <td><?php echo $user->job; ?></td>
                             <td>
                                 <?php if (!empty($user->image_path)) : ?>
-                                    <img src="<?php echo $user->image_path; ?>" alt="Photo de profil" width="50"><?php var_dump($user->image_path) ?>
+                                    <img src="../../../<?php echo $user->image_path; ?>" alt="Photo de profil" width="50">
                                 <?php else : ?>
                                     <span>Aucune image</span>
                                 <?php endif; ?>
