@@ -36,17 +36,17 @@ CREATE TABLE IF NOT EXISTS cars
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
     brand VARCHAR(150) NOT NULL,
-    year_of_circulation INT(4) NOT NULL,
+    year INT(4) NOT NULL,
     price INT NOT NULL,
     miles INT NOT NULL,
     description VARCHAR(255) NOT NULL,
     caracteristics VARCHAR(255) NOT NULL,
-    equipments VARCHAR(255) NULL,
+    equipement VARCHAR(255) NULL,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-INSERT INTO cars (name, brand, year_of_circulation, price, miles, description, caracteristics, equipments)
+INSERT INTO cars (name, brand, year, price, miles, description, caracteristics, equipement)
 VALUES
 ('Peugeot 208', 'Peugeot', 2010, 4000, 124000, 'La Peugeot 208 est une voiture dans l\'air du temps, polyvalente et particulièrement confortable pour un véhicule de sa catégorie. Elle est également écologique et économique et satisfait les automobilistes les plus exigeants, tant en matière de budget que de performances et d\'esthétisme.', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui.'),
 ('Citroën C4', 'Citroën', 2013, 5500, 112000, 'Voiture berline de tous les jours. Conduite très agréable. Beaux volumes. Confortable et fiable', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option sport: oui'),
@@ -61,6 +61,12 @@ CREATE TABLE media (
   FOREIGN KEY (car_id) REFERENCES cars(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+INSERT INTO media(name, path, user_id)
+VALUES
+('profil-1.jpg', 'public/img/profil-1.jpg', '1'),
+('profil-3.jpg','public/img/profil-3.jpg','2'),
+('profil-5.jpg','public/img/profil-5.jpg','3');
 
 CREATE TABLE IF NOT EXISTS configs
 (

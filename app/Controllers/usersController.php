@@ -50,7 +50,7 @@ class UsersController
         $userForm->addField('password', 'password', 'Mot de passe');
         $userForm->addField('role', 'text', 'Rôle');
         $userForm->addField('job', 'text', 'Métier');
-        $userForm->addField('img', 'image', 'Image');
+        $userForm->addField('addImgUser', 'image', 'Image');
 
         return $userForm->generateForm('addUser', 'Ajouter', true);
     }
@@ -62,7 +62,7 @@ class UsersController
         $userForm->addField('password', 'password', 'Mot de passe');
         $userForm->addField('role', 'text', 'Rôle');
         $userForm->addField('job', 'text', 'Métier');
-        $userForm->addField('imgUser', 'image', 'Image');
+        $userForm->addField('editImgUser', 'image', 'Image');
 
         return $userForm->generateForm('updateUser', 'Modifier', true);
     }
@@ -111,17 +111,12 @@ class UsersController
             $userId = $this->userModel->getLastInsertId();
 
             // Gérer le téléchargement de l'image
-            $this->mediasController->uploadImage($userId);
+            $this->mediasController->uploadImage($userId, 'addImgUser');
 
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;
         }
     }
-
-
-
-
-
 
 
 
@@ -147,9 +142,34 @@ class UsersController
             $role = $this->formCreator->clearInput($_POST['role']);
             $job = $this->formCreator->clearInput($_POST['job']);
 
+
+
+            // Vérification du mot de passe 
+            if (!preg_match('/[A-Z]/', $password) || strlen($password) < 8) {
+                $this->errorMessage = 'Le mot de passe doit contenir au moins une majuscule et avoir au moins 8 caractères';
+                return;
+            }
+
+            // Vérification du rôle 
+            if ($role !== '1' && $role !== '2') {
+                $this->errorMessage = 'Le rôle doit être égal à 1 ou 2.';
+                return;
+            }
+
+            // Vérification du métier
+            if (strlen($job) < 3 || strlen($job) > 30) {
+                $this->errorMessage = 'Le métier doit contenir entre 3 et 30 caractères.';
+                return;
+            }
+
             $securedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             $this->userModel->updateUser($userId, $username, $securedPassword, $role, $job);
+
+
+
+            // Gérer le téléchargement de l'image
+            $this->mediasController->uploadImage($userId, 'editImgUser');
 
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;

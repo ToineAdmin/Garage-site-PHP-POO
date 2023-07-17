@@ -17,7 +17,7 @@ class ServicesController
         $this->formCreator = new FormCreator();
     }
 
-    public function Serviceindex()
+    public function serviceIndex()
     {
         // Récupération des utilisateurs depuis le modèle
         $servicesData = $this->serviceModel->getAllServices();

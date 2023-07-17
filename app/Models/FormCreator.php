@@ -31,7 +31,7 @@ class FormCreator
     $form = '';
 
     if ($includeForm) {
-        $form .= '<form method="POST" action="" enctype="multipart/form-data" class="w-100">';
+      $form .= '<form method="POST" action="" enctype="multipart/form-data" class="w-100">';
     }
 
     foreach ($this->fields as $field) {
@@ -47,13 +47,13 @@ class FormCreator
       if ($type === 'text') {
         $form .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control mb-3" autocomplete="off" value="' . $value . '" required>';
       } elseif ($type === 'email') {
-        $form .= '<input type="email" name="' . $name . '" id="' . $name . '" class="form-control mb-3" value="' . $value . '"  required>';
+        $form .= '<input type="email" name="' . $name . '" id="' . $name . '" class="form-control mb-3" value="' . $value . '" required>';
       } elseif ($type === 'textarea') {
-        $form .= '<textarea name="' . $name . '" id="' . $name . '" class="form-control mb-3" rows="4" value="' . $value . '"  required></textarea>';
+        $form .= '<textarea name="' . $name . '" id="' . $name . '" class="form-control mb-3" rows="4" value="' . $value . '" required></textarea>';
       } elseif ($type === 'password') {
         $form .= '<input type="password" name="' . $name . '" id="' . $name . '" class="form-control mb-3" required>';
       } elseif ($type === 'image') {
-        $form .= '<input type="file" name="' . $name . '" id="' . $name . '" class="form-control mb-3" accept="image/*">';
+        $form .= '<input type="file" name="' . $name . '" id="' . $name . '" class="form-control mb-3" accept="image/*" ' . $multiple . '>';
       }
 
       if ($includeForm) {
@@ -64,11 +64,8 @@ class FormCreator
     $form .= '<button type="submit" class="btn btn-primary" name="' . $submitName . '">' . $submitText . '</button>';
     $form .= '</form>';
 
-
-
     return $form;
   }
-
 
   public function clearInput($input)
   {

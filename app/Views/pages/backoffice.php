@@ -5,20 +5,24 @@ session_start();
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../Templates/header.php';
 
-use App\Controllers\MediasController;
+use App\Models\CarModel;
 use App\Models\Database;
 use App\Models\UserModel;
-use App\Models\ServiceModel;
-use App\Controllers\UsersController;
-use App\Controllers\ServicesController;
 use App\Models\MediaModel;
+use App\Models\ServiceModel;
+use App\Controllers\CarsController;
+use App\Controllers\UsersController;
+use App\Controllers\MediasController;
+use App\Controllers\ServicesController;
 
 //Instance des objets
 $db = new Database('db_garage');
 $mediaModel = new MediaModel($db);
 $userModel = new UserModel($db);
+$carModel = new CarModel($db);
 $mediasController = new MediasController($mediaModel);
 $usersController = new UsersController($userModel, $mediaModel, $mediasController);
+$carsController = new CarsController($carModel, $mediaModel, $mediasController);
 
 $serviceModel = new serviceModel($db);
 $servicesController = new servicesController($serviceModel);
@@ -29,9 +33,15 @@ $usersData = $data['usersData'];
 $addUserForm = $data['addUserForm'];
 $editUserForm = $data['editUserForm'];
 
+//Récupère les données cars
+$data = $carsController->carsIndex();
+$carsData = $data['carsData'];
+$addCarForm = $data['addCarForm'];
+$editCarForm = $data['editCarForm'];
+
 
 //Récupère les données services
-$data = $servicesController->Serviceindex();
+$data = $servicesController->serviceIndex();
 $servicesData = $data['servicesData'];
 $addServiceForm = $data['addServiceForm'];
 $editServiceForm = $data['editServiceForm'];
@@ -42,7 +52,12 @@ $usersController->addUserSubmit();
 $usersController->deleteUserSubmit();
 $usersController->updateUserSubmit();
 
-//Traitement de formulaire users
+//Traitement de formulaire cars
+$carsController->addCarSubmit();
+$carsController->deleteCarSubmit();
+$carsController->updateCarSubmit();
+
+//Traitement de formulaire service
 $servicesController->addServiceSubmit();
 $servicesController->deleteServiceSubmit();
 $servicesController->updateServiceSubmit();
@@ -63,6 +78,8 @@ error_reporting(E_ALL);
 
     <main>
         <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?= $_SESSION['username'] ?></h2>
+
+        <!-- Tableau des utilisateurs -->
         <section class="container my-5">
             <h3>Utilisateurs</h3>
             <table class="table">
@@ -72,6 +89,7 @@ error_reporting(E_ALL);
                         <th>Mot de passe</th>
                         <th>Rôle</th>
                         <th>Métier</th>
+                        <th>Profil</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -89,6 +107,7 @@ error_reporting(E_ALL);
                                     <span>Aucune image</span>
                                 <?php endif; ?>
                             </td>
+
                             <td>
                                 <form action="" method="post" style="display: inline;">
                                     <input type="hidden" name="userId" value="<?php echo $user->id; ?>">
@@ -197,6 +216,91 @@ error_reporting(E_ALL);
                 <h5>Modifier un service</h5>
                 <?php echo $editServiceForm; ?>
                 <input type="hidden" name="serviceId" value="<?php echo $service->id; ?>">
+                <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
+            <?php endif; ?>
+            </div>
+        </section>
+
+
+
+        <!-- Tableau des voitures -->
+        <section class="container my-5">
+            <h3>Voitures en stock</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Marque</th>
+                        <th>Année</th>
+                        <th>Prix</th>
+                        <th>Kilométrage</th>
+                        <th>Description</th>
+                        <th>Caractéristiques</th>
+                        <th>Equipement</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($carsData as $car) : ?>
+                        <tr>
+                            <td><?php echo $car->name; ?></td>
+                            <td><?php echo $car->brand; ?></td>
+                            <td><?php echo $car->year; ?></td>
+                            <td><?php echo $car->price; ?></td>
+                            <td><?php echo $car->miles; ?></td>
+                            <td><?php echo $car->description; ?></td>
+                            <td><?php echo $car->caracteristics; ?></td>
+                            <td><?php echo $car->equipement; ?></td>
+                            <td>
+                                <?php if (!empty($car->image_path)) : ?>
+                                    <img src="<?php echo $car->image_path ?>" alt="Photo de voiture" width="50">
+                                <?php else : ?>
+                                    <span>Aucune image</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <form action="" method="post" style="display: inline;">
+                                    <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
+                                    <button type="submit" class="btn btn-primary" name="editCar">Modifier</button>
+                                </form>
+                                <form action="" method="post" style="display: inline;">
+                                    <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
+                                    <button type="submit" class="btn btn-danger" name="deleteCar">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <?php if (isset($carsController) && !empty($carsController->getErrorMessage())) : ?>
+                <div class="alert alert-danger"><?php echo $carsController->getErrorMessage(); ?></div>
+            <?php endif; ?>
+
+
+            <form action="" method="POST">
+                <button type="submit" class="btn btn-primary" name="addCars">Ajouter</button>
+            </form>
+
+
+            <?php
+            $showAddCarForm = '';
+            if (isset($_POST['addCars'])) {
+                $showAddCarForm = true;
+                echo '<div class="card card-body w-50 m-auto">';
+            } else if (isset($_POST['editCar'])) {
+                $showAddCarForm = false;
+                echo '<div class="card card-body w-50 m-auto">';
+            }
+            ?>
+            <?php if ($showAddCarForm) : ?>
+                <h5>Ajouter une voiture</h5>
+                <?php echo $addCarForm; ?>
+                <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
+            <?php elseif ($showAddCarForm === false) : ?>
+                <h5>Modifier une voiture</h5>
+                <?php echo $editCarForm; ?>
+                <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
                 <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
             <?php endif; ?>
             </div>

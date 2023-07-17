@@ -46,13 +46,14 @@ class UserModel
         $stmt->execute();
     }
 
-    public function updateUser($userId, $username, $password, $role)
+    public function updateUser($userId, $username, $password, $role, $job)
     {
-        $stmt = $this->db->getPDO()->prepare("UPDATE users SET username = :username, password = :password, role = :role WHERE id = :id");
+        $stmt = $this->db->getPDO()->prepare("UPDATE users SET username = :username, password = :password, role = :role, job = :job WHERE id = :id");
         $stmt->bindParam(':id', $userId);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':role', $role);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password,PDO::PARAM_STR);
+        $stmt->bindParam(':role', $role,PDO::PARAM_STR);
+        $stmt->bindParam(':job', $job, PDO::PARAM_STR);
         $stmt->execute();
     }
 
