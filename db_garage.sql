@@ -56,8 +56,10 @@ CREATE TABLE media (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   path VARCHAR(255) NOT NULL,
+  user_id INT,
   car_id INT,
-  FOREIGN KEY (car_id) REFERENCES cars(id)
+  FOREIGN KEY (car_id) REFERENCES cars(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS configs

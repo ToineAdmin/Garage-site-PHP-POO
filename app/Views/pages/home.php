@@ -66,6 +66,8 @@ $servicesData = $serviceData['servicesData'];
                 <?php endforeach ?>
             </div>
     </section>
+
+<!-- 
     <section class="container" id="occasions">
         <div class="album py-5 bg-body-tertiary">
             <div class="container">
@@ -73,23 +75,23 @@ $servicesData = $serviceData['servicesData'];
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <?php
 
-                    //affiche en fonction de la base de données les voitures
+                    // //affiche en fonction de la base de données les voitures
 
-                    $stmt = $db->getPDO()->prepare("SELECT * FROM cars");
-                    $stmt->execute();
-                    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+                    // $stmt = $db->getPDO()->prepare("SELECT * FROM cars");
+                    // $stmt->execute();
+                    // $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-                    $cars = new Cars();
+                    // $cars = new Cars();
 
-                    foreach ($data as $row) {
-                        $carsName = $row->brand;
-                        $cars->displayCars($carsName);
-                    }
+                    // foreach ($data as $row) {
+                    //     $carsName = $row->brand;
+                    //     $cars->displayCars($carsName);
+                    // }
                     ?>
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <section class="container marketing mb-lg-5" id="about">
         <div class="row">
             <h2 class="text-center mb-lg-5 mt-lg-5">Qui sommes nous ?</h2>

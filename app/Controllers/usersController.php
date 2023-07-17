@@ -43,6 +43,7 @@ class UsersController
         $userForm->addField('password', 'password', 'Mot de passe');
         $userForm->addField('role', 'text', 'Rôle');
         $userForm->addField('job', 'text', 'Métier');
+        $userForm->addField('img', 'image', 'Image');
 
         return $userForm->generateForm('addUser', 'Ajouter', true);
     }
@@ -54,9 +55,11 @@ class UsersController
         $userForm->addField('password', 'password', 'Mot de passe');
         $userForm->addField('role', 'text', 'Rôle');
         $userForm->addField('job', 'text', 'Métier');
+        $userForm->addField('imgUser', 'image', 'Image');
 
         return $userForm->generateForm('updateUser', 'Modifier', true);
     }
+
 
     public function addUserSubmit()
     {
@@ -84,7 +87,6 @@ class UsersController
                 return;
             }
 
-
             // Vérification du métier
             if (strlen($job) < 3 || strlen($job) > 30) {
                 $this->errorMessage = 'Le métier doit contenir entre 3 et 30 caractères.';
@@ -95,11 +97,40 @@ class UsersController
 
             $username = ucfirst($username);
 
+            // Ajouter l'utilisateur dans la table "users"
             $this->userModel->addUser($username, $securedPassword, $role, $job);
+
+            // Récupérer l'ID de l'utilisateur inséré
+            $userId = $this->userModel->getLastInsertId();
+
+            // Gérer le téléchargement de l'image
+            $this->uploadImage($userId);
+
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;
         }
     }
+
+    public function uploadImage($userId)
+    {
+        if(isset($_FILES['img'])){
+            $targetDirectory = __DIR__ . "/../../public/img/";
+            $targetFile = $targetDirectory . basename($_FILES['img']['name']);
+            $imageFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
+    
+            // Vérifie si le fichier est une image
+            $check = getimagesize($_FILES['img']['tmp_name']);
+            if($check !== false) {
+                // Déplace le fichier téléversé dans le dossier approprié
+                move_uploaded_file($_FILES['img']['tmp_name'], $targetFile);
+            } else {
+                // Le fichier téléversé n'est pas une image valide
+            }
+        }
+    }
+    
+
+
 
 
     public function deleteUserSubmit()
@@ -114,7 +145,8 @@ class UsersController
         }
     }
 
-    public function updateUserSubmit(){
+    public function updateUserSubmit()
+    {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateUser'])) {
             $userId = $_POST['userId'];
@@ -124,13 +156,12 @@ class UsersController
             $job = $this->formCreator->clearInput($_POST['job']);
 
             $securedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
+
             $this->userModel->updateUser($userId, $username, $securedPassword, $role, $job);
-    
+
             header('Location: ' . $_SERVER['PHP_SELF']);
             exit;
         }
-
     }
 
     public function getErrorMessage()

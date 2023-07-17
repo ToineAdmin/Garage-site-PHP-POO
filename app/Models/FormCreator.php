@@ -53,7 +53,7 @@ class FormCreator
       } elseif ($type === 'password') {
         $form .= '<input type="password" name="' . $name . '" id="' . $name . '" class="form-control mb-3" required>';
       } elseif ($type === 'image') {
-        $form .= '<input type="file" name="' . $name . '[]" id="' . $name . '" class="form-control mb-3" accept="image/*" ' . $multiple . ' required>';
+        $form .= '<input type="file" name="' . $name . '" id="' . $name . '" class="form-control mb-3" accept="image/*">';
       }
 
       if ($includeForm) {

@@ -18,8 +18,6 @@ if ($p === 'home') {
     // Gérer les autres cas ou les valeurs de p spécifiques
     // par exemple, vous pouvez afficher une page d'erreur ou une redirection par défaut.
 }
-
-
 // $db = new Database('db_garage');
 // $data = $db->query('INSERT INTO users(username) VALUES (users'); 
 
@@ -30,6 +28,10 @@ if ($p === 'home') {
 // $data = donnée que l'ont souhaite récupérer
 
 ?>
+
+
+
+
 
 <!-- 
 

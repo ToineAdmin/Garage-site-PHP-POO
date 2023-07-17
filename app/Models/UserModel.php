@@ -49,6 +49,13 @@ class UserModel
         $stmt->execute();
     }
 
+    public function getLastInsertId()
+    {
+        // Récupérer l'ID du dernier enregistrement inséré
+        return $this->db->getPDO()->lastInsertId();
+    }
+
+
     public function checkUsername($username)
 {
 

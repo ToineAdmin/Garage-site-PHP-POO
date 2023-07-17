@@ -42,6 +42,12 @@ $servicesController->addServiceSubmit();
 $servicesController->deleteServiceSubmit();
 $servicesController->updateServiceSubmit();
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+var_dump($targetDir = __DIR__ . '/../../public/img');
+
 
 //affichage des formulaire modif et add
 
