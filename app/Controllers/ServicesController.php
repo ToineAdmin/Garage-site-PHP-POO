@@ -61,14 +61,12 @@ class ServicesController
             $description = $this->formCreator->clearInput($_POST['description']);
 
 
-            // Vérification de l'existence du nom d'utilisateur
             if ($this->serviceModel->checkServicename($name)) {
                 $this->errorMessage = 'Ce service existe déjà.';
                 return;
             }
 
 
-            // Vérification du métier
             if (strlen($name) < 3 || strlen($name) > 30) {
                 $this->errorMessage = 'Le service doit contenir entre 3 et 30 caractères.';
                 return;
@@ -105,6 +103,16 @@ class ServicesController
             $serviceId = $_POST['serviceId'];
             $name = $this->formCreator->clearInput($_POST['name']);
             $description = $this->formCreator->clearInput($_POST['description']);
+
+            
+            if (strlen($name) < 3 || strlen($name) > 30) {
+                $this->errorMessage = 'Le service doit contenir entre 3 et 30 caractères.';
+                return;
+            }
+            if (strlen($description) < 10 || strlen($description) > 200) {
+                $this->errorMessage = 'La description doit contenir entre 10 et 100 caractères.';
+                return;
+            }
 
             $this->serviceModel->updateService($serviceId, $name, $description);
     

@@ -14,14 +14,11 @@ class LoginModel
         $this->db = $db;
     }
 
-    public function getUsers($username)
+    public function getUsers($email)
     {
-        $stmt = $this->db->getPDO()->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->bindValue(':username', $username,PDO::PARAM_STR);
+        $stmt = $this->db->getPDO()->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
-
     }
-    
-
 }

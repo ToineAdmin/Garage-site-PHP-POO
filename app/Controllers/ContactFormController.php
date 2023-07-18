@@ -76,7 +76,7 @@ class ContactFormController extends FormCreator
   public function createContactForm()
   {
     $contactForm = new FormCreator();
-    $contactForm->addField('username', 'text', 'Nom :');
+    $contactForm->addField('email', 'text', 'Nom :');
     $contactForm->addField('email', 'email', 'E-mail :');
     $contactForm->addField('message', 'textarea', 'Message :');
 

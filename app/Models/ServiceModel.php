@@ -11,7 +11,7 @@ class ServiceModel
 
     private $db;
 
-    
+
     public function __construct(Database $db)
     {
         $this->db = $db;
@@ -65,7 +65,7 @@ class ServiceModel
     public function checkServiceName($name)
     {
 
-        // Exécutez la requête avec le nom d'utilisateur en tant que paramètre
+        // Exécutez la requête avec l'email en tant que paramètre
         $stmt = $this->db->getPDO()->prepare("SELECT COUNT(*) as count FROM services WHERE name = :name");
         $stmt->bindValue(':name', $name);
         $stmt->execute();
@@ -75,9 +75,9 @@ class ServiceModel
 
         // Vérifiez si le nombre d'enregistrements retourné est supérieur à 0
         if ($result['count'] > 0) {
-            return true; // Le nom d'utilisateur existe déjà
+            return true; // l'email existe déjà
         } else {
-            return false; // Le nom d'utilisateur n'existe pas
+            return false; // l'email n'existe pas
         }
     }
 }

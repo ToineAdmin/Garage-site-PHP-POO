@@ -68,7 +68,7 @@ error_reporting(E_ALL);
 
 
 
-//affichage des formulaire modif et add
+
 
 
 
@@ -77,7 +77,7 @@ error_reporting(E_ALL);
 <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION['role'] === 'admin') : ?>
 
     <main>
-        <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?= $_SESSION['username'] ?></h2>
+        <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?= $_SESSION['email'] ?></h2>
 
         <!-- Tableau des utilisateurs -->
         <section class="container my-5">
@@ -85,7 +85,7 @@ error_reporting(E_ALL);
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Nom d'utilisateur</th>
+                        <th>Email</th>
                         <th>Mot de passe</th>
                         <th>Rôle</th>
                         <th>Métier</th>
@@ -96,7 +96,7 @@ error_reporting(E_ALL);
                 <tbody>
                     <?php foreach ($usersData as $user) : ?>
                         <tr>
-                            <td><?php echo $user->username; ?></td>
+                            <td><?php echo $user->email; ?></td>
                             <td><?php echo $user->password; ?></td>
                             <td><?php echo $user->role; ?></td>
                             <td><?php echo $user->job; ?></td>
@@ -134,21 +134,21 @@ error_reporting(E_ALL);
                 <button type="submit" class="btn btn-primary" name="addUsers">Ajouter</button>
             </form>
             <?php
+
             $showAddUserForm = '';
             if (isset($_POST['addUsers'])) {
                 $showAddUserForm = true;
+                // Différence : Suppression de la balise card-body avec la classe m-auto
                 echo '<div class="card card-body w-25 m-auto">';
             } else if (isset($_POST['editUser'])) {
                 $showAddUserForm = false;
                 foreach ($_POST as $key => $value) {
                     if (strpos($key, 'editUser_') !== false) {
                         $userId = explode('_', $key)[1];
-                        // Utilisez $userId pour effectuer les opérations nécessaires pour le formulaire de modification de l'utilisateur correspondant
-                        // ...
-                        break; // Sortir de la boucle une fois que l'ID de l'utilisateur est trouvé
+                        break;
                     }
-                    echo '<div class="card card-body m-auto">';
                 }
+                echo '<div class="card card-body w-25 m-auto">';
             }
             ?>
             <?php if ($showAddUserForm) : ?>
@@ -266,7 +266,7 @@ error_reporting(E_ALL);
                             <td><?php echo $car->caracteristics; ?></td>
                             <td><?php echo $car->equipement; ?></td>
                             <td>
-                                <?php 
+                                <?php
                                 $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
                                 foreach ($mediaPaths as $index => $media) :
                                     $imagePath = $media->path;

@@ -5,17 +5,17 @@ USE db_garage;
 CREATE TABLE IF NOT EXISTS users
 (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(150) NOT NULL,
+    email VARCHAR(200) NOT NULL,
     password VARCHAR(255) NOT NULL,
     role INT NOT NULL,
     job VARCHAR(50) NOT NULL
 );
 
-INSERT INTO users (username, password, role, job)
+INSERT INTO users (email, password, role, job)
 VALUES
-('Vincent', '$2y$10$Z6UpC2PaWdpTAfSWwntUPeULUviVMQ4xkvU5IazGw.3ieKZbObC.m', 1, 'Patron'),
-('Hubert', '$2y$10$FXHj7innBMbAyeockURn0.stoQ4ekSztrDsdDVv40xELonXC7MqAO', 2, 'Mécanicien'),
-('Jean', '$2y$10$so4QXuzYQVCuIu7SrEjNgeKth3.jpzr0wgBSqeyOb8EGTXQlY1dZq', 2, 'Mécanicien');
+('vincent@gmail.com', '$2y$10$Z6UpC2PaWdpTAfSWwntUPeULUviVMQ4xkvU5IazGw.3ieKZbObC.m', 1, 'Patron'),
+('hubert@gmail.com', '$2y$10$FXHj7innBMbAyeockURn0.stoQ4ekSztrDsdDVv40xELonXC7MqAO', 2, 'Mécanicien'),
+('jean@gmail.com', '$2y$10$so4QXuzYQVCuIu7SrEjNgeKth3.jpzr0wgBSqeyOb8EGTXQlY1dZq', 2, 'Mécanicien');
 
 CREATE TABLE IF NOT EXISTS services
 (

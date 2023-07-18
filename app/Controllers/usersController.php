@@ -46,7 +46,7 @@ class UsersController
     private function createAddUserForm()
     {
         $userForm = new FormCreator();
-        $userForm->addField('username', 'text', 'Nom d\'utilisateur');
+        $userForm->addField('email', 'text', 'Nom d\'utilisateur');
         $userForm->addField('password', 'password', 'Mot de passe');
         $userForm->addField('role', 'text', 'Rôle');
         $userForm->addField('job', 'text', 'Métier');
@@ -55,13 +55,15 @@ class UsersController
         return $userForm->generateForm('addUser', 'Ajouter', true);
     }
 
-    private function createEditUserForm()
+    private function createEditUserForm($userId)
     {
+        $userData = $this->userModel->getUserDataById($userId);
+
         $userForm = new FormCreator();
-        $userForm->addField('username', 'text', 'Nom d\'utilisateur');
+        $userForm->addField('email', 'text', 'Email', $userData->email); // Pré-remplir le champ email avec la valeur de l'utilisateur
         $userForm->addField('password', 'password', 'Mot de passe');
-        $userForm->addField('role', 'text', 'Rôle');
-        $userForm->addField('job', 'text', 'Métier');
+        $userForm->addField('role', 'text', 'Rôle', $userData->role); // Pré-remplir le champ rôle avec la valeur de l'utilisateur
+        $userForm->addField('job', 'text', 'Métier', $userData->job); // Pré-remplir le champ métier avec la valeur de l'utilisateur
         $userForm->addField('editImgUser', 'image', 'Image');
 
         return $userForm->generateForm('updateUser', 'Modifier', true);
@@ -71,14 +73,14 @@ class UsersController
     public function addUserSubmit()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addUser'])) {
-            $username = $this->formCreator->clearInput($_POST['username']);
+            $email = $this->formCreator->clearInput($_POST['email']);
             $password = $this->formCreator->clearInput($_POST['password']);
             $role = $this->formCreator->clearInput($_POST['role']);
             $job = $this->formCreator->clearInput($_POST['job']);
 
-            // Vérification de l'existence du nom d'utilisateur
-            if ($this->userModel->checkUsername($username)) {
-                $this->errorMessage = 'Ce nom d\'utilisateur existe déjà.';
+            // Vérification de l'existence de l'email
+            if ($this->userModel->checkemail($email)) {
+                $this->errorMessage = 'Cet email existe déjà.';
                 return;
             }
 
@@ -102,10 +104,10 @@ class UsersController
 
             $securedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $username = ucfirst($username);
+            $email = ucfirst($email);
 
             // Ajouter l'utilisateur dans la table "users"
-            $this->userModel->addUser($username, $securedPassword, $role, $job);
+            $this->userModel->addUser($email, $securedPassword, $role, $job);
 
             // Récupérer l'ID de l'utilisateur inséré
             $userId = $this->userModel->getLastInsertId();
@@ -136,8 +138,8 @@ class UsersController
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateUser'])) {
-            $userId = $_POST['userId'] ; 
-            $username = $this->formCreator->clearInput($_POST['username']);
+            $userId = $_POST['userId'];
+            $email = $this->formCreator->clearInput($_POST['email']);
             $password = $this->formCreator->clearInput($_POST['password']);
             $role = $this->formCreator->clearInput($_POST['role']);
             $job = $this->formCreator->clearInput($_POST['job']);
@@ -164,7 +166,7 @@ class UsersController
 
             $securedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $this->userModel->updateUser($userId, $username, $securedPassword, $role, $job);
+            $this->userModel->updateUser($userId, $email, $securedPassword, $role, $job);
 
 
 

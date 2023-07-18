@@ -134,8 +134,8 @@ $contactFormController->contacFormSubmit();
                         <div id="carouselExample_<?php echo $car->id; ?>" class="carousel slide">
                             <div class="carousel-inner">
                                 <?php
-                                $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id); var_dump($mediaPaths);
-                                foreach ($mediaPaths as $index => $media) : 
+                                $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
+                                foreach ($mediaPaths as $index => $media) :
                                     $imagePath = $media->path;
                                     $isActive = ($index === 0) ? 'active' : '';
                                 ?>
@@ -243,7 +243,7 @@ $contactFormController->contacFormSubmit();
                     <svg class="bd-placeholder-img rounded-circle" width="200" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <image href="../<?php echo $user->image_path; ?>" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
                     </svg>
-                    <h2 class="fw-normal text-center"><?php echo $user->username ?></h2>
+                    <h2 class="fw-normal text-center"><?php echo $user->email ?></h2>
                     <h5 class="fw-normal text-center"><?php echo $user->job ?></h5>
                 </div>
             <?php endforeach ?>
@@ -273,8 +273,91 @@ $contactFormController->contacFormSubmit();
             <div class="col-sm-12 col-md-6 ">
                 <?php echo $contactForm ?>
             </div>
-            <div class="col-sm-12 col-md-6 ">
-                <h5>Horraire d'ouverture</h5>
+            <div class="col-md-4">
+                <h2>Horaire d'ouvertures</h2>
+                <?php
+
+                define('JOURS', [
+                    'Lundi',
+                    'Mardi',
+                    'Mercredi',
+                    'Jeudi',
+                    'Vendredi',
+                    'Samedi',
+                    'Dimanche'
+                ]);
+
+                define('CRENEAUX', [
+                    [
+                        [8, 12],
+                        [14, 19]
+                    ],
+                    [
+                        [8, 12],
+                        [14, 19]
+                    ],
+                    [
+                        [8, 12]
+                    ],
+                    [
+                        [8, 12],
+                        [14, 19]
+                    ],
+                    [
+                        [8, 12],
+                        [14, 19]
+                    ],
+                    [],
+                    []
+                ]);
+
+                date_default_timezone_set('Europe/Paris');
+                $heure = (int)($_GET['heure'] ?? date('G'));
+                $jour = (int)($_GET['jour'] ?? date('N') - 1);
+                $creneaux = CRENEAUX[$jour];
+                $ouvert = in_creneaux($heure, $creneaux);
+                function creneaux_html(array $creneaux)
+                {
+                    if (empty($creneaux)) {
+                        return 'Fermé';
+                    }
+                    $phrases = [];
+                    foreach ($creneaux as $creneau) {
+                        $phrases[] = "de <strong>{$creneau[0]}h</strong> à <strong>{$creneau[1]}h</strong>";
+                    }
+                    return 'Ouvert ' . implode(' et ', $phrases);
+                }
+
+                function in_creneaux(int $heure, array $creneaux): bool
+                {
+                    foreach ($creneaux as $creneau) {
+                        $debut = $creneau[0];
+                        $fin = $creneau[1];
+                        if ($heure >= $debut && $heure < $fin) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                function select(string $name, $value, array $options): string
+                {
+                    $html_options = [];
+                    foreach ($options as $k => $option) {
+                        $attributes = $k == $value ? ' selected' : '';
+                        $html_options[] = "<option value='$k' $attributes>$option</option>";
+                    }
+                    return "<select class='form-control' name='$name'>" . implode($html_options) . '</select>';
+                }
+                ?>
+
+                <ul>
+                    <?php foreach (JOURS as $k => $jour) : ?>
+                        <li>
+                            <strong><?= $jour ?></strong> :
+                            <?= creneaux_html(CRENEAUX[$k]); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         </div>
     </section>

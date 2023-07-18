@@ -1,7 +1,9 @@
 <?php
 
 namespace Public\Index;
+
 require_once __DIR__ . '/../vendor/autoload.php';
+
 use App\Models\Database;
 
 
@@ -19,11 +21,11 @@ if ($p === 'home') {
     // par exemple, vous pouvez afficher une page d'erreur ou une redirection par défaut.
 }
 // $db = new Database('db_garage');
-// $data = $db->query('INSERT INTO users(username) VALUES (users'); 
+// $data = $db->query('INSERT INTO users(email) VALUES (users'); 
 
 
 // foreach ($data as $row) {
-//     echo $row->username. "<br>";
+//     echo $row->email. "<br>";
 // }
 // $data = donnée que l'ont souhaite récupérer
 

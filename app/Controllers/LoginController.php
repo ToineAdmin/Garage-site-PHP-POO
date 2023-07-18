@@ -31,7 +31,7 @@ class LoginController
     public function creatLoginForm()
     {
         $loginForm = new FormCreator();
-        $loginForm->addField('username', 'text', 'Nom :');
+        $loginForm->addField('email', 'text', 'Nom :');
         $loginForm->addField('password', 'password', 'Mot de passe :');
 
         return $loginForm->generateForm('conectBtn', 'Se connecter', true);
@@ -39,17 +39,17 @@ class LoginController
     public function processLoginForm()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['conectBtn'])) {
-            $username = $this->formCreator->clearInput($_POST['username']);
+            $email = $this->formCreator->clearInput($_POST['email']);
             $password = $this->formCreator->clearInput($_POST['password']);
 
-            $user = $this->loginModel->getUsers($username);
+            $user = $this->loginModel->getUsers($email);
 
 
             if ($user && password_verify($password, $user->password)) {
                 $_SESSION['loggedin'] = true;
                 $_SESSION['role'] = (intval($user->role) === 1) ? 'admin' : 'employee';
-                $_SESSION['username'] = $username;
-                CookieManager::setLoggedInCookie($username);
+                $_SESSION['email'] = $email;
+                CookieManager::setLoggedInCookie($email);
 
                 header('Location: backoffice.php');
                 exit();
