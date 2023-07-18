@@ -63,6 +63,7 @@ class MediaModel
         $stmt->bindValue(':carId', $carId, PDO::PARAM_INT);
         $stmt->execute();
     }
+    
     public function getMediaPathsByCarId($carId)
     {
         $sql = "SELECT path FROM media WHERE car_id = :carId";

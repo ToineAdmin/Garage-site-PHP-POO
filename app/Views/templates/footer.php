@@ -29,7 +29,7 @@
 
         card.classList.toggle('active');
         details.style.display = card.classList.contains('active') ? 'block' : 'none';
-        button.textContent = card.classList.contains('active') ? 'Réduire' : 'En savoir plus';
+        button.textContent = card.classList.contains('active') ? '-' : 'En savoir plus';
     }
 </script>
 

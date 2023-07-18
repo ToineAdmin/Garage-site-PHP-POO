@@ -115,6 +115,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
   header{
     display: flex;
     flex-wrap: nowrap;
+
   }
 </style>
 </html>

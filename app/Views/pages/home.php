@@ -65,8 +65,8 @@ $contactFormController->contacFormSubmit();
                 <h1 class="fw-light">Garage V.PARROT</h1>
                 <p class="lead text-body-secondary">Un garage à l'écoute, compétent et disponible !</p>
                 <p>
-                    <a href="#" class="btn btn-primary my-2">Nos occasions</a>
-                    <a href="#" class="btn btn-secondary my-2">Nous contacter</a>
+                    <a href="#occasions" class="btn btn-primary my-2">Nos occasions</a>
+                    <a href="#contact" class="btn btn-secondary my-2">Nous contacter</a>
                 </p>
             </div>
         </div>
@@ -74,11 +74,13 @@ $contactFormController->contacFormSubmit();
 
     <!-- SECTION SERVICES !-->
     <section id="services">
-        <div class="container py-4">
-            <div class="row align-items-md-stretch">
+        <div class="container d-flex flex-wrap">
+            <div class="row w-100">
                 <h2 class="text-center mb-5">Nos Services</h2>
+            </div>
+            <div class="row d-flex justify-content-center flex-wrap">
                 <?php foreach ($servicesData as $service) : ?>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="h-100 p-5 text-bg-dark rounded-3">
                             <h2><?php echo $service->name ?></h2>
                             <p><?php echo $service->description ?></p>
@@ -91,70 +93,105 @@ $contactFormController->contacFormSubmit();
 
     <section id="occasions">
         <h2 class="text-center">Nos voitures d'occasions</h2>
-        <div class="container occas-container d-flex justify-content-center flex-wrap">
-            <?php foreach ($carsData as $car) : ?>
-                <div class="card">
-                    <div id="carouselExample_<?php echo $car->id; ?>" class="carousel slide">
-                        <div class="carousel-inner">
-                            <?php
-                            $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
-                            foreach ($mediaPaths as $index => $media) :
-                                $imagePath = $media->path;
-                                $isActive = ($index === 0) ? 'active' : '';
-                            ?>
-                                <div class="carousel-item <?php echo $isActive; ?>">
-                                    <img src="../<?php echo $imagePath; ?>" class="d-block carousel-image" alt="Car Image">
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample_<?php echo $car->id; ?>" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample_<?php echo $car->id; ?>" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><?php echo $car->name; ?></h5>
-                        <p class="card-text"><?php echo $car->brand; ?></p>
-                        <p class="card-text"><?php echo $car->price; ?> €</p>
-                        <button class="btn btn-primary toggle-button" id="toggle-button_<?php echo $car->id; ?>" onclick="toggleDetails(this, '<?php echo $car->id; ?>')">En savoir plus</button>
-                        <div class="details" id="details_<?php echo $car->id; ?>" style="display: none;">
-                            <div class="table-container">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Kilomètres</th>
-                                            <td><?php echo $car->miles; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Année de mise en circulation</th>
-                                            <td><?php echo $car->year; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Description</th>
-                                            <td><?php echo $car->description; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Caractéristiques</th>
-                                            <td><?php echo $car->caracteristics; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Équipements</th>
-                                            <td><?php echo $car->equipement; ?></td>
-                                        </tr>
-                                        <!-- Ajoutez plus de paires th/td ici pour plus de détails -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        <div class="container mb-5">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="filter-brand">Marque :</label>
+                    <select id="filter-brand" class="form-control">
+                        <option value="">Toutes les marques</option>
+                        <option value="brand1">Marque 1</option>
+                        <option value="brand2">Marque 2</option>
+                        <option value="brand3">Marque 3</option>
+                        <!-- Ajoutez d'autres options de marque ici -->
+                    </select>
                 </div>
-            <?php endforeach; ?>
+                <div class="col-md-4">
+                    <label for="filter-year">Année :</label>
+                    <select id="filter-year" class="form-control">
+                        <option value="">Toutes les années</option>
+                        <option value="year1">2021</option>
+                        <option value="year2">2020</option>
+                        <option value="year3">2019</option>
+                        <!-- Ajoutez d'autres options d'année ici -->
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filter-price">Prix :</label>
+                    <select id="filter-price" class="form-control">
+                        <option value="">Tous les prix</option>
+                        <option value="price1">Moins de 10 000 €</option>
+                        <option value="price2">10 000 € - 20 000 €</option>
+                        <option value="price3">20 000 € - 30 000 €</option>
+                        <!-- Ajoutez d'autres options de prix ici -->
+                    </select>
+                </div>
+            </div>
         </div>
-
+        <div class="container">
+            <div class="row occas-container d-flex justify-content-center flex-wrap ">
+                <?php foreach ($carsData as $car) : ?>
+                    <div class="card">
+                        <div id="carouselExample_<?php echo $car->id; ?>" class="carousel slide">
+                            <div class="carousel-inner">
+                                <?php
+                                $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id); var_dump($mediaPaths);
+                                foreach ($mediaPaths as $index => $media) : 
+                                    $imagePath = $media->path;
+                                    $isActive = ($index === 0) ? 'active' : '';
+                                ?>
+                                    <div class="carousel-item <?php echo $isActive; ?>">
+                                        <img src="../<?php echo $imagePath; ?>" class="d-block carousel-image" alt="Car Image">
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample_<?php echo $car->id; ?>" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample_<?php echo $car->id; ?>" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><?php echo $car->name; ?></h5>
+                            <p class="card-text"><?php echo $car->brand; ?></p>
+                            <p class="card-text"><?php echo $car->price; ?> €</p>
+                            <div class="details" id="details_<?php echo $car->id; ?>" style="display: none;">
+                                <div class="table-container">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="col">Kilomètres</th>
+                                                <td><?php echo $car->miles; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Année de mise en circulation</th>
+                                                <td><?php echo $car->year; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Description</th>
+                                                <td><?php echo $car->description; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Caractéristiques</th>
+                                                <td><?php echo $car->caracteristics; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Équipements</th>
+                                                <td><?php echo $car->equipement; ?></td>
+                                            </tr>
+                                            <!-- Ajoutez plus de paires th/td ici pour plus de détails -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary toggle-button" id="toggle-button_<?php echo $car->id; ?>" onclick="toggleDetails(this, '<?php echo $car->id; ?>')">En savoir plus</button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </section>
 
 
@@ -167,8 +204,9 @@ $contactFormController->contacFormSubmit();
             transition: max-height 0.5s ease;
             overflow: hidden;
             height: 500px;
-            min-width: 25vw;
+            min-width: 310px;
             max-width: 25vw;
+            padding: 0;
         }
 
         .card.active {
@@ -178,21 +216,19 @@ $contactFormController->contacFormSubmit();
         }
 
         .table-container {
-            max-height: 500px;
+            max-height: 700px;
             overflow-y: auto;
         }
 
         .carousel-image {
             width: 100%;
             height: 300px;
-            /* Remplacez par la hauteur souhaitée */
             object-fit: cover;
-            /* Permet de conserver les proportions de l'image tout en la recadrant si nécessaire */
+
         }
 
         .occas-container {
             gap: 30px;
-            /* Ajustez la valeur de l'espacement selon vos besoins */
         }
     </style>
 
@@ -229,11 +265,16 @@ $contactFormController->contacFormSubmit();
     <!-- SECTION CONTACT !-->
     <section class="container" id="contact">
         <div class="row">
-            <h2 class="text-center">CONTACT</h2>
+            <div class="col-12">
+                <h2 class="text-center">CONTACT</h2>
+            </div>
         </div>
-        <div class="row contact-form container d-flex justify-content-center">
-            <div class="w-25">
+        <div class="row contact-form d-flex justify-content-center">
+            <div class="col-sm-12 col-md-6 ">
                 <?php echo $contactForm ?>
+            </div>
+            <div class="col-sm-12 col-md-6 ">
+                <h5>Horraire d'ouverture</h5>
             </div>
         </div>
     </section>

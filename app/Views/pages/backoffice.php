@@ -266,11 +266,13 @@ error_reporting(E_ALL);
                             <td><?php echo $car->caracteristics; ?></td>
                             <td><?php echo $car->equipement; ?></td>
                             <td>
-                                <?php if (!empty($car->image_path)) : ?>
-                                    <img src="../../../<?php echo $car->image_path ?>" alt="Photo de voiture" width="100">
-                                <?php else : ?>
-                                    <span>Aucune image</span>
-                                <?php endif; ?>
+                                <?php 
+                                $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
+                                foreach ($mediaPaths as $index => $media) :
+                                    $imagePath = $media->path;
+                                ?>
+                                    <img src="../../../<?php echo $imagePath ?>" alt="Photo de voiture" width="100">
+                                <?php endforeach ?>
                             </td>
                             <td>
                                 <form action="" method="post" id="myForm" style="display: inline;">
