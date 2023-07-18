@@ -1,7 +1,7 @@
 <?php
 
 use App\Controllers\CookieManager;
-use App\Controllers\MediasController;
+
 
 // Vérifier si l'utilisateur est connecté en utilisant la classe CookieManager
 $isLoggedIn = CookieManager::isLoggedIn();
@@ -16,19 +16,22 @@ if ($isLoggedIn) {
 $title = 'Garage V.PARROT';
 require_once __DIR__ . '/../Templates/header.php';
 
-use App\Models\UserModel;
-use App\Controllers\ContactFormController;
-use App\Models\FormCreator;
-use App\Models\ServiceModel;
-
-use App\Controllers\UsersController;
-use App\Controllers\ServicesController;
 use App\Models\MediaModel;
+use App\Models\ServiceModel;
+use App\Models\CarModel;
+use App\Models\UserModel;
+use App\Controllers\CarsController;
+use App\Controllers\UsersController;
+use App\Controllers\MediasController;
+use App\Controllers\ServicesController;
+use App\Controllers\ContactFormController;
 
 //Instance des classes
 $userModel = new UserModel($db);
 $mediaModel = new MediaModel($db);
+$carModel = new CarModel($db);
 $mediasController = new MediasController($mediaModel);
+$carsController = new CarsController($carModel, $mediaModel, $mediasController);
 $usersController = new UsersController($userModel, $mediaModel, $mediasController);
 
 $serviceModel = new ServiceModel($db);
@@ -38,9 +41,13 @@ $servicesController = new ServicesController($serviceModel);
 $data = $usersController->index();
 $usersData = $data['usersData'];
 
+$data = $carsController->carsIndex();
+$carsData = $data['carsData'];
+
 $serviceData = $servicesController->Serviceindex();
 $servicesData = $serviceData['servicesData'];
 
+//variables pour contactForm
 $name = '';
 $email = '';
 $message = '';
@@ -81,31 +88,115 @@ $contactFormController->contacFormSubmit();
             </div>
     </section>
 
-    <!-- 
-    <section class="container" id="occasions">
-        <div class="album py-5 bg-body-tertiary">
-            <div class="container">
-                <h2 class="text-center mb-lg-5">NOS VOITURE D'OCCASIONS</h2>
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <?php
 
-                    // //affiche en fonction de la base de données les voitures
-
-                    // $stmt = $db->getPDO()->prepare("SELECT * FROM cars");
-                    // $stmt->execute();
-                    // $data = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-                    // $cars = new Cars();
-
-                    // foreach ($data as $row) {
-                    //     $carsName = $row->brand;
-                    //     $cars->displayCars($carsName);
-                    // }
-                    ?>
+    <section id="occasions">
+        <h2 class="text-center">Nos voitures d'occasions</h2>
+        <div class="container occas-container d-flex justify-content-center flex-wrap">
+            <?php foreach ($carsData as $car) : ?>
+                <div class="card">
+                    <div id="carouselExample_<?php echo $car->id; ?>" class="carousel slide">
+                        <div class="carousel-inner">
+                            <?php
+                            $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
+                            foreach ($mediaPaths as $index => $media) :
+                                $imagePath = $media->path;
+                                $isActive = ($index === 0) ? 'active' : '';
+                            ?>
+                                <div class="carousel-item <?php echo $isActive; ?>">
+                                    <img src="../<?php echo $imagePath; ?>" class="d-block carousel-image" alt="Car Image">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample_<?php echo $car->id; ?>" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample_<?php echo $car->id; ?>" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><?php echo $car->name; ?></h5>
+                        <p class="card-text"><?php echo $car->brand; ?></p>
+                        <p class="card-text"><?php echo $car->price; ?> €</p>
+                        <button class="btn btn-primary toggle-button" id="toggle-button_<?php echo $car->id; ?>" onclick="toggleDetails(this, '<?php echo $car->id; ?>')">En savoir plus</button>
+                        <div class="details" id="details_<?php echo $car->id; ?>" style="display: none;">
+                            <div class="table-container">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Kilomètres</th>
+                                            <td><?php echo $car->miles; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Année de mise en circulation</th>
+                                            <td><?php echo $car->year; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Description</th>
+                                            <td><?php echo $car->description; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Caractéristiques</th>
+                                            <td><?php echo $car->caracteristics; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Équipements</th>
+                                            <td><?php echo $car->equipement; ?></td>
+                                        </tr>
+                                        <!-- Ajoutez plus de paires th/td ici pour plus de détails -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-    </section> -->
+
+    </section>
+
+
+
+
+
+
+    <style>
+        .card {
+            transition: max-height 0.5s ease;
+            overflow: hidden;
+            height: 500px;
+            min-width: 25vw;
+            max-width: 25vw;
+        }
+
+        .card.active {
+            height: auto;
+            font-weight: normal;
+
+        }
+
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 300px;
+            /* Remplacez par la hauteur souhaitée */
+            object-fit: cover;
+            /* Permet de conserver les proportions de l'image tout en la recadrant si nécessaire */
+        }
+
+        .occas-container {
+            gap: 30px;
+            /* Ajustez la valeur de l'espacement selon vos besoins */
+        }
+    </style>
+
+    </section>
 
     <!-- SECTION QUI SOMMES NOUS !-->
     <section class="container marketing mb-lg-5" id="about">
@@ -142,7 +233,7 @@ $contactFormController->contacFormSubmit();
         </div>
         <div class="row contact-form container d-flex justify-content-center">
             <div class="w-25">
-            <?php echo $contactForm ?>
+                <?php echo $contactForm ?>
             </div>
         </div>
     </section>

@@ -27,7 +27,7 @@ class CarsController
     public function carsIndex()
     {
         // Récupération des voitures depuis le modèle
-        $carsData = $this->carModel->getAllCarsWithMedia();
+        $carsData = $this->carModel->getAllCars();
 
         // Création du formulaire d'ajout voiture
         $addCarForm = $this->createAddCarForm();
@@ -118,7 +118,7 @@ class CarsController
             }
 
             // Vérification de la longueur de la description, des caractéristiques et de l'équipement
-            if (strlen($description) > 200 || strlen($caracteristics) > 200 || strlen($equipement) > 200) {
+            if (strlen($description) > 250 || strlen($caracteristics) > 250 || strlen($equipement) > 250) {
                 $this->errorMessage = 'La description, les caractéristiques et l\'équipement ne doivent pas dépasser 200 caractères.';
                 return;
             }
@@ -195,10 +195,13 @@ class CarsController
             }
 
             // Vérification de la longueur de la description, des caractéristiques et de l'équipement
-            if (strlen($description) > 200 || strlen($caracteristics) > 200 || strlen($equipement) > 200) {
-                $this->errorMessage = 'La description, les caractéristiques et l\'équipement ne doivent pas dépasser 200 caractères.';
+            if (strlen($description) > 250 || strlen($caracteristics) > 250 || strlen($equipement) > 250) {
+                $this->errorMessage = 'La description, les caractéristiques et l\'équipement ne doivent pas dépasser 250 caractères.';
                 return;
             }
+
+            
+            $name = ucfirst($name);
 
 
             $this->carModel->updateCar($carId, $name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement);

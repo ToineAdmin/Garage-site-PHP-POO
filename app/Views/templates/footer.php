@@ -22,20 +22,19 @@
     });
 
 
-//     //SCRIPT POUR AFFICHER FORMULAIRE DANS LE BACKOFFICE 
-//     // Sélectionnez le bouton "Ajouter"
-// const btnAddUser = document.querySelector('.btn-add-user');
+    // BOUTON EN SAVOIR PLUS CAR_CARD
+    function toggleDetails(button, carId) {
+        var card = button.closest('.card');
+        var details = card.querySelector('#details_' + carId);
 
-// // Sélectionnez le formulaire d'ajout d'utilisateur
-// const addUserForm = document.querySelector('#add-user-form');
-
-
-// btnAddUser.addEventListener('click', function() {
-//     // Affiche le formulaire d'ajout d'utilisateur en modifiant son style d'affichage
-//     addUserForm.style.display = 'block';
-//     btnAddUser.style.display = 'none';
-// });
+        card.classList.toggle('active');
+        details.style.display = card.classList.contains('active') ? 'block' : 'none';
+        button.textContent = card.classList.contains('active') ? 'Réduire' : 'En savoir plus';
+    }
 </script>
+
+
+
 
 </script>
 </body>

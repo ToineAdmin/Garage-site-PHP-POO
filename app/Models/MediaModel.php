@@ -35,7 +35,7 @@ class MediaModel
         $stmt->execute();
     }
 
-    
+
     public function deleteUserImg($userId)
     {
         $stmt = $this->db->getPDO()->prepare("DELETE FROM media WHERE user_id = :userId");
@@ -63,7 +63,17 @@ class MediaModel
         $stmt->bindValue(':carId', $carId, PDO::PARAM_INT);
         $stmt->execute();
     }
-    
+    public function getMediaPathsByCarId($carId)
+    {
+        $sql = "SELECT path FROM media WHERE car_id = :carId";
+        $stmt = $this->db->getPDO()->prepare($sql);
+        $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
+        $stmt->execute();
+        $mediaPaths = $stmt->fetchAll(PDO::FETCH_OBJ); 
+        return $mediaPaths;
+    }
+
+
 
     public function getCarImg($carId)
     {
