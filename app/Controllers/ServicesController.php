@@ -45,11 +45,12 @@ class ServicesController
         return $serviceForm->generateForm('addService', 'Ajouter', true);
     }
 
-    private function createEditServiceForm()
+    private function createEditServiceForm($serviceId)
     {
+        $serviceData = $this->serviceModel->getServiceDataById($serviceId);
         $serviceForm = new FormCreator();
-        $serviceForm->addField('name', 'text', 'Nom du service');
-        $serviceForm->addField('description', 'textarea', 'Description');
+        $serviceForm->addField('name', 'text', 'Nom du service', $serviceData->name);
+        $serviceForm->addField('description', 'textarea', 'Description', $serviceData->description);
 
         return $serviceForm->generateForm('updateService', 'Modifier', true);
     }

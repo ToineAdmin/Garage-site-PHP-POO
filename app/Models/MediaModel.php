@@ -74,6 +74,42 @@ class MediaModel
         return $mediaPaths;
     }
 
+    public function deleteDuplicatePaths($carId = null, $userId = null)
+{
+    $query = "SELECT path, COUNT(*) as count FROM media";
+
+    if ($carId !== null) {
+        $query .= " WHERE car_id = :carId";
+        $bindParam = ':carId';
+        $id = $carId;
+    } elseif ($userId !== null) {
+        $query .= " WHERE user_id = :userId";
+        $bindParam = ':userId';
+        $id = $userId;
+    } else {
+        // Si ni carId ni userId ne sont fournis, nous ne pouvons pas effectuer la comparaison des chemins
+        return;
+    }
+
+    $query .= " GROUP BY path HAVING count > 1";
+
+    $stmt = $this->db->getPDO()->prepare($query);
+    $stmt->bindParam($bindParam, $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $duplicatePaths = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    if (empty($duplicatePaths)) {
+        // S'il n'y a pas de chemins en double, nous n'avons rien à supprimer
+        return;
+    }
+
+    $inClause = implode(',', array_fill(0, count($duplicatePaths), '?'));
+
+    $deleteStmt = $this->db->getPDO()->prepare("DELETE FROM media WHERE path IN ($inClause)");
+    $deleteStmt->execute($duplicatePaths);
+}
+
+
 
 
     public function getCarImg($carId)

@@ -59,18 +59,19 @@ class CarsController
         return $carForm->generateForm('addCar', 'Ajouter', true);
     }
 
-    private function createEditCarForm()
+    private function createEditCarForm($carId)
     {
+        $carData = $this->carModel->getCarDataById($carId);
         $carForm = new FormCreator();
-        $carForm->addField('name', 'text', 'Nom');
-        $carForm->addField('brand', 'text', 'Marque');
-        $carForm->addField('year', 'text', 'Année de mise en circulation (AAAA)');
-        $carForm->addField('price', 'text', 'Prix');
-        $carForm->addField('miles', 'text', 'Kilométrage');
-        $carForm->addField('description', 'textarea', 'Description');
-        $carForm->addField('caracteristics', 'textarea', 'Caractéristiques(Boite de vitesse, Nombres de places, Nombre de portes');
-        $carForm->addField('equipement', 'textarea', 'Equipements(Climatisation, Mode, etc.)');
-        $carForm->addField('editImgCar', 'image', 'Image', true);
+        $carForm->addField('name', 'text', 'Nom', $carData->name);
+        $carForm->addField('brand', 'text', 'Marque', $carData->brand);
+        $carForm->addField('year', 'text', 'Année de mise en circulation (AAAA)', $carData->year);
+        $carForm->addField('price', 'text', 'Prix', $carData->price);
+        $carForm->addField('miles', 'text', 'Kilométrage', $carData->miles);
+        $carForm->addField('description', 'textarea', 'Description', $carData->description);
+        $carForm->addField('caracteristics', 'textarea', 'Caractéristiques(Boite de vitesse, Nombres de places, Nombre de portes', $carData->caracteristics);
+        $carForm->addField('equipement', 'textarea', 'Equipements(Climatisation, Mode, etc.)', $carData->equipement);
+        $carForm->addField('editImgCar', 'image', 'Image','',true);
 
         return $carForm->generateForm('updateCar', 'Modifier', true);
     }
@@ -195,7 +196,7 @@ class CarsController
             }
 
             // Vérification de la longueur de la description, des caractéristiques et de l'équipement
-            if (strlen($description) > 250 || strlen($caracteristics) > 250 || strlen($equipement) > 250) {
+            if (strlen($description) > 400 || strlen($caracteristics) > 250 || strlen($equipement) > 250) {
                 $this->errorMessage = 'La description, les caractéristiques et l\'équipement ne doivent pas dépasser 250 caractères.';
                 return;
             }

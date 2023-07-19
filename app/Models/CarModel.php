@@ -21,6 +21,19 @@ class CarModel
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+    
+    public function getCarDataById($carId)
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['editCar'])) {
+            $carId = $_POST["carId"];
+        }
+        $stmt = $this->db->getPDO()->prepare("SELECT * FROM cars WHERE id = :carId");
+        $stmt->bindParam(':carId', $carId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+
     public function getAllCarsWithMedia()
     {
         $sql = "SELECT c.*, m.path AS image_path FROM cars c LEFT JOIN media m ON c.id = m.car_id";

@@ -66,8 +66,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
-
+// petit Formatage pour affichage du nom
+$username =explode('@', $_SESSION['email']);
+$username = ucfirst($username[0]);
 
 
 
@@ -77,7 +78,7 @@ error_reporting(E_ALL);
 <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION['role'] === 'admin') : ?>
 
     <main>
-        <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?= $_SESSION['email'] ?></h2>
+        <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?= $username ?></h2>
 
         <!-- Tableau des utilisateurs -->
         <section class="container my-5">

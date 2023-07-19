@@ -53,6 +53,20 @@ class ServiceModel
         $stmt->execute();
     }
 
+
+    
+    public function getServiceDataById($serviceId)
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['editService'])) {
+            $serviceId = $_POST["serviceId"];
+        }
+        $stmt = $this->db->getPDO()->prepare("SELECT * FROM services WHERE id = :serviceId");
+        $stmt->bindParam(':serviceId', $serviceId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+
     public function updateService($serviceId, $name, $description)
     {
         $stmt = $this->db->getPDO()->prepare("UPDATE services SET name = :name, description = :description WHERE id = :id");

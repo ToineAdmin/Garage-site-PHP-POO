@@ -77,48 +77,68 @@ class MediasController
     {
         if (isset($_FILES[$fieldName])) {
             $targetDirectory = __DIR__ . "/../../public/img/";
-    
+
+
+            $this->mediaModel->deleteDuplicatePaths($carId);
             // Parcourir chaque fichier téléversé
             foreach ($_FILES[$fieldName]['tmp_name'] as $key => $tmpName) {
                 $imageName = basename($_FILES[$fieldName]['name'][$key]);
                 $targetFile = $targetDirectory . $imageName;
                 $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-    
+
                 // Vérification de la taille du fichier (2 Mo maximum)
                 $maxFileSize = 2 * 1024 * 1024; // 2 Mo
                 if ($_FILES[$fieldName]['size'][$key] > $maxFileSize) {
                     echo "Le fichier est trop volumineux. Veuillez choisir un fichier de taille inférieure à 2 Mo.";
                     continue;
                 }
-    
+
                 // Vérification de l'extension du fichier (seulement les formats JPEG, PNG et GIF)
                 $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                 if (!in_array($imageFileType, $allowedExtensions)) {
                     echo "Les extensions de fichiers autorisées sont : JPG, JPEG, PNG et GIF.";
                     continue;
                 }
-    
+
                 // Vérification si le fichier est une image valide
                 $check = getimagesize($tmpName);
                 if ($check === false) {
                     echo "Le fichier n'est pas une image valide.";
                     continue;
                 }
-    
-                // Déplacement du fichier téléversé dans le dossier approprié avec un nom de fichier unique
-                $uniqueFilename = uniqid() . '_' . $imageName;
-                $targetFile = $targetDirectory . $uniqueFilename;
+
+
+
+
+                // Appeler addCarImg pour stocker les informations de chaque image dans la table media
+                $imagePath = 'public/img/' . $imageName;
+
+
+                if ($this->isFilePathExists($imagePath, $carId)) {
+                    // Le chemin existe déjà, supprimer le chemin correspondant de la table media
+                    $this->mediaModel->deleteCarImg($carId, $imagePath);
+                }
+
                 if (!move_uploaded_file($tmpName, $targetFile)) {
                     echo "Une erreur s'est produite lors de l'upload du fichier.";
                     continue;
                 }
-    
-                // Appeler addCarImg pour stocker les informations de chaque image dans la table media
-                $imagePath = 'public/img/' . $uniqueFilename;
+
                 $this->mediaModel->addCarImg($imageName, $imagePath, $carId);
             }
         }
     }
-    
+
+    private function isFilePathExists($filePath, $carId)
+    {
+        $existingMediaPaths = $this->mediaModel->getMediaPathsByCarId($carId);
+
+        foreach ($existingMediaPaths as $existingPath) {
+            if ($existingPath->path === $filePath) {
+                return true;
+            }
+        }
+        return false;
+    }
     
 }

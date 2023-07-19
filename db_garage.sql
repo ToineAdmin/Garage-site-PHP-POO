@@ -39,20 +39,20 @@ CREATE TABLE IF NOT EXISTS cars
     year INT(4) NOT NULL,
     price INT NOT NULL,
     miles INT NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    caracteristics VARCHAR(255) NOT NULL,
-    equipement VARCHAR(255) NULL,
+    description TEXT NOT NULL,
+    caracteristics TEXT NOT NULL,
+    equipement TEXT NULL,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 INSERT INTO cars (name, brand, year, price, miles, description, caracteristics, equipement)
 VALUES
-('Peugeot 208', 'Peugeot', 2010, 4000, 124000, 'La Peugeot 208 est une voiture dans l\'air du temps, polyvalente et particulièrement confortable pour un véhicule de sa catégorie. Elle est également écologique et économique et satisfait les automobilistes les plus exigeants, tant en matière de budget que de performances et d\'esthétisme.', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui.'),
+('Peugeot 208', 'Peugeot', 2010, 4000, 124000, 'La Peugeot 208 est une voiture dans l\'air du temps, polyvalente et particulièrement confortable pour un véhicule de sa catégorie. Elle est également écologique et économique et satisfait les automobilistes les plus exigeants.', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui.'),
 ('Citroën C4', 'Citroën', 2013, 5500, 112000, 'Voiture berline de tous les jours. Conduite très agréable. Beaux volumes. Confortable et fiable', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option sport: oui'),
 ('Volvo EX30', 'Volvo', 2020, 12000, 98000, 'EX30. Des performances électriques impressionnantes dans un petit format. Conduite intuitive. Sécurisation optimale', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option: economie d\'energie');
 
-CREATE TABLE media (
+CREATE TABLE IF NOT EXISTS media (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   path VARCHAR(255) NOT NULL,
@@ -62,11 +62,18 @@ CREATE TABLE media (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-INSERT INTO media(name, path, user_id)
+INSERT INTO media (name, path, user_id, car_id)
 VALUES
-('profil-1.jpg', 'public/img/profil-1.jpg', '1'),
-('profil-3.jpg','public/img/profil-3.jpg','2'),
-('profil-5.jpg','public/img/profil-5.jpg','3');
+('profil-1.jpg', 'public/img/profil-1.jpg', '1', NULL),
+('profil-3.jpg', 'public/img/profil-3.jpg', '2', NULL),
+('profil-5.jpg', 'public/img/profil-5.jpg', '3', NULL),
+('208(1).jpg', 'public/img/208(1).jpg', NULL, '1'),
+('208(2).jpg', 'public/img/208(2).jpg', NULL, '1'),
+('208(3).jpg', 'public/img/208(3).jpg', NULL, '1'),
+('c4(1).jpg', 'public/img/c4(1).jpg', NULL, '2'),
+('c4(2).jpg', 'public/img/c4(2).jpg', NULL, '2'),
+('volvo1.jpg', 'public/img/volvo1.jpg', NULL, '3'),
+('volvo2.jpg', 'public/img/volvo2.jpg', NULL, '3');
 
 CREATE TABLE IF NOT EXISTS configs
 (
