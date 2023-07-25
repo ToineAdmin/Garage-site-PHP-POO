@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS cars
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-INSERT INTO cars (name, brand, year, price, miles, description, caracteristics, equipement)
+INSERT INTO cars (name, brand, year, price, miles, description, caracteristics, equipement, user_id)
 VALUES
-('Peugeot 208', 'Peugeot', 2010, 4000, 124000, 'La Peugeot 208 est une voiture dans l\'air du temps, polyvalente et particulièrement confortable pour un véhicule de sa catégorie. Elle est également écologique et économique et satisfait les automobilistes les plus exigeants.', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui.'),
-('Citroën C4', 'Citroën', 2013, 5500, 112000, 'Voiture berline de tous les jours. Conduite très agréable. Beaux volumes. Confortable et fiable', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option sport: oui'),
-('Volvo EX30', 'Volvo', 2020, 12000, 98000, 'EX30. Des performances électriques impressionnantes dans un petit format. Conduite intuitive. Sécurisation optimale', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option: economie d\'energie');
+('Peugeot 208', 'Peugeot', 2010, 4000, 124000, 'La Peugeot 208 est une voiture dans l\'air du temps, polyvalente et particulièrement confortable pour un véhicule de sa catégorie. Elle est également écologique et économique et satisfait les automobilistes les plus exigeants.', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui.', 1),
+('Citroën C4', 'Citroën', 2013, 5500, 112000, 'Voiture berline de tous les jours. Conduite très agréable. Beaux volumes. Confortable et fiable', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option sport: oui', 1),
+('Volvo EX30', 'Volvo', 2020, 12000, 98000, 'EX30. Des performances électriques impressionnantes dans un petit format. Conduite intuitive. Sécurisation optimale', 'Boite de vitesse: manuelle. Nombre de places: 5. Nombre de portes: 5.', 'climatisation:oui. Option: economie d\'energie', 1);
 
 CREATE TABLE IF NOT EXISTS media (
   id INT AUTO_INCREMENT PRIMARY KEY,

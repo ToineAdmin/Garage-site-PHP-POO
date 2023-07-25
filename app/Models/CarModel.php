@@ -41,10 +41,10 @@ class CarModel
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function addCar($name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement)
+    public function addCar($name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement, $user_id)
     {
-        $stmt = $this->db->getPDO()->prepare("INSERT INTO cars (name, brand, year, price, miles, description, caracteristics, equipement )
-        VALUES (:name, :brand, :year, :price, :miles, :description, :caracteristics, :equipement)");
+        $stmt = $this->db->getPDO()->prepare("INSERT INTO cars (name, brand, year, price, miles, description, caracteristics, equipement, user_id )
+        VALUES (:name, :brand, :year, :price, :miles, :description, :caracteristics, :equipement, :user_id)");
 
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
         $stmt->bindValue(':brand', $brand, PDO::PARAM_STR);
@@ -54,6 +54,7 @@ class CarModel
         $stmt->bindValue(':description', $description, PDO::PARAM_STR);
         $stmt->bindValue(':caracteristics', $caracteristics, PDO::PARAM_STR);
         $stmt->bindValue(':equipement', $equipement, PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
@@ -64,9 +65,9 @@ class CarModel
         $stmt->execute();
     }
 
-    public function updateCar($carId, $name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement)
+    public function updateCar($carId, $name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement, $user_id)
     {
-        $stmt = $this->db->getPDO()->prepare("UPDATE cars SET name = :name, brand = :brand, year = :year, price = :price, miles = :miles, description = :description, caracteristics = :caracteristics, equipement = :equipement
+        $stmt = $this->db->getPDO()->prepare("UPDATE cars SET name = :name, brand = :brand, year = :year, price = :price, miles = :miles, description = :description, caracteristics = :caracteristics, equipement = :equipement, user_id = :user_id
         WHERE id = :id");
         $stmt->bindParam(':id', $carId);
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
@@ -77,6 +78,7 @@ class CarModel
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':caracteristics', $caracteristics, PDO::PARAM_STR);
         $stmt->bindParam(':equipement', $equipement, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 

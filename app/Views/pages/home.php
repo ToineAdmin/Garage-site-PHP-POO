@@ -15,6 +15,7 @@ if ($isLoggedIn) {
 
 $title = 'Garage V.PARROT';
 require_once __DIR__ . '/../Templates/header.php';
+require_once __DIR__ . '/../../../Config.php';
 
 use App\Models\MediaModel;
 use App\Models\ServiceModel;
@@ -55,6 +56,8 @@ $message = '';
 $contactFormController = new ContactFormController($name, $email, $message);
 $contactForm = $contactFormController->createContactForm();
 $contactFormController->contacFormSubmit();
+
+
 ?>
 <main>
 
@@ -102,7 +105,7 @@ $contactFormController->contacFormSubmit();
                         <option value="brand1">Marque 1</option>
                         <option value="brand2">Marque 2</option>
                         <option value="brand3">Marque 3</option>
-                        <!-- Ajoutez d'autres options de marque ici -->
+
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -112,7 +115,7 @@ $contactFormController->contacFormSubmit();
                         <option value="year1">2021</option>
                         <option value="year2">2020</option>
                         <option value="year3">2019</option>
-                        <!-- Ajoutez d'autres options d'année ici -->
+
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -122,7 +125,7 @@ $contactFormController->contacFormSubmit();
                         <option value="price1">Moins de 10 000 €</option>
                         <option value="price2">10 000 € - 20 000 €</option>
                         <option value="price3">20 000 € - 30 000 €</option>
-                        <!-- Ajoutez d'autres options de prix ici -->
+
                     </select>
                 </div>
             </div>
@@ -243,7 +246,12 @@ $contactFormController->contacFormSubmit();
                     <svg class="bd-placeholder-img rounded-circle" width="200" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <image href="../<?php echo $user->image_path; ?>" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
                     </svg>
-                    <h2 class="fw-normal text-center"><?php echo $user->email ?></h2>
+                    <?php
+                        // Formatage username
+                        $username = explode('@' , $user->email);
+                        $username = ucfirst($username[0]);
+                    ?>
+                    <h2 class="fw-normal text-center"><?php echo $username ?></h2>
                     <h5 class="fw-normal text-center"><?php echo $user->job ?></h5>
                 </div>
             <?php endforeach ?>
@@ -276,40 +284,6 @@ $contactFormController->contacFormSubmit();
             <div class="col-md-4">
                 <h2>Horaire d'ouvertures</h2>
                 <?php
-
-                define('JOURS', [
-                    'Lundi',
-                    'Mardi',
-                    'Mercredi',
-                    'Jeudi',
-                    'Vendredi',
-                    'Samedi',
-                    'Dimanche'
-                ]);
-
-                define('CRENEAUX', [
-                    [
-                        [8, 12],
-                        [14, 19]
-                    ],
-                    [
-                        [8, 12],
-                        [14, 19]
-                    ],
-                    [
-                        [8, 12]
-                    ],
-                    [
-                        [8, 12],
-                        [14, 19]
-                    ],
-                    [
-                        [8, 12],
-                        [14, 19]
-                    ],
-                    [],
-                    []
-                ]);
 
                 date_default_timezone_set('Europe/Paris');
                 $heure = (int)($_GET['heure'] ?? date('G'));

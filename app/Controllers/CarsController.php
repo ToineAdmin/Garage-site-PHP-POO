@@ -88,6 +88,7 @@ class CarsController
             $description = $this->formCreator->clearInput($_POST['description']);
             $caracteristics = $this->formCreator->clearInput($_POST['caracteristics']);
             $equipement = $this->formCreator->clearInput($_POST['equipement']);
+            $user_id = $_POST['user_id'];
 
             // Vérification de l'existence du nom de voiture
             if ($this->carModel->checkCarName($name)) {
@@ -129,7 +130,7 @@ class CarsController
             $name = ucfirst($name);
 
             // Ajouter la voiture dans la table "cars"
-            $this->carModel->addCar($name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement);
+            $this->carModel->addCar($name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement, $user_id);
 
             // Récupérer l'ID de la voiture inséré
             $carId = $this->carModel->getLastInsertCarId();
@@ -170,6 +171,7 @@ class CarsController
             $description = $this->formCreator->clearInput($_POST['description']);
             $caracteristics = $this->formCreator->clearInput($_POST['caracteristics']);
             $equipement = $this->formCreator->clearInput($_POST['equipement']);
+            $user_id = $_POST['user_id'];
 
             // Vérification de la longueur du nom et de la marque
             if (strlen($name) > 50 || strlen($brand) > 50) {
@@ -205,7 +207,7 @@ class CarsController
             $name = ucfirst($name);
 
 
-            $this->carModel->updateCar($carId, $name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement);
+            $this->carModel->updateCar($carId, $name, $brand, $year, $price, $miles, $description, $caracteristics, $equipement, $user_id);
 
             $this->mediasController->uploadCarImage($carId, 'editImgCar');
 

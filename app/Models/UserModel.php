@@ -82,15 +82,15 @@ class UserModel
     public function checkemail($email)
     {
 
-        // Exécutez la requête avec l'email en tant que paramètre
+        // Exécute la requête avec l'email en tant que paramètre
         $stmt = $this->db->getPDO()->prepare("SELECT COUNT(*) as count FROM users WHERE email = :email");
         $stmt->bindValue(':email', $email);
         $stmt->execute();
 
-        // Récupérez le résultat de la requête
+        // Récupère le résultat de la requête
         $result = $stmt->fetch();
 
-        // Vérifiez si le nombre d'enregistrements retourné est supérieur à 0
+        // Vérifie si le nombre d'enregistrements retourné est supérieur à 0
         if ($result['count'] > 0) {
             return true; // l'email existe déjà
         } else {

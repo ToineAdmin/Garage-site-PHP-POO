@@ -49,6 +49,7 @@ class LoginController
                 $_SESSION['loggedin'] = true;
                 $_SESSION['role'] = (intval($user->role) === 1) ? 'admin' : 'employee';
                 $_SESSION['email'] = $email;
+                $_SESSION['user_id'] = $user->id;
                 CookieManager::setLoggedInCookie($email);
 
                 header('Location: backoffice.php');

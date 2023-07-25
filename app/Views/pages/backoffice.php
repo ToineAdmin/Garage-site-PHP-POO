@@ -4,6 +4,7 @@ session_start();
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../Templates/header.php';
+require_once __DIR__ . '/../../../Config.php';
 
 use App\Models\CarModel;
 use App\Models\Database;
@@ -62,23 +63,20 @@ $servicesController->addServiceSubmit();
 $servicesController->deleteServiceSubmit();
 $servicesController->updateServiceSubmit();
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-// petit Formatage pour affichage du nom
-$username =explode('@', $_SESSION['email']);
-$username = ucfirst($username[0]);
+
 
 
 
 
 ?>
 
-<?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION['role'] === 'admin') : ?>
 
-    <main>
-        <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?= $username ?></h2>
+<main>
+    <h2 class="my-5 text-center">Bienvenue dans votre espace d'administation <?php echo formatEmail($_SESSION['email']) ?></h2>
+
+    <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $_SESSION['role'] === 'admin') : ?>
+
 
         <!-- Tableau des utilisateurs -->
         <section class="container my-5">
@@ -235,102 +233,118 @@ $username = ucfirst($username[0]);
             <?php endif; ?>
             </div>
         </section>
+    <?php endif ?>
 
 
 
-        <!-- Tableau des voitures -->
-        <section class="container my-5">
-            <h3>Voitures en stock</h3>
-            <table class="table">
-                <thead>
+    <!-- Tableau des voitures -->
+    <section class="container my-5">
+        <h3>Voitures en stock</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Marque</th>
+                    <th>Année</th>
+                    <th>Prix</th>
+                    <th>Kilométrage</th>
+                    <th>Description</th>
+                    <th>Caractéristiques</th>
+                    <th>Equipement</th>
+                    <th>Images </th>
+                    <th>Action</th>
+                    <th> Ajouté par </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($carsData as $car) : ?>
                     <tr>
-                        <th>Nom</th>
-                        <th>Marque</th>
-                        <th>Année</th>
-                        <th>Prix</th>
-                        <th>Kilométrage</th>
-                        <th>Description</th>
-                        <th>Caractéristiques</th>
-                        <th>Equipement</th>
-                        <th>Action</th>
+                        <td><?php echo $car->name; ?></td>
+                        <td><?php echo $car->brand; ?></td>
+                        <td><?php echo $car->year; ?></td>
+                        <td><?php echo $car->price; ?></td>
+                        <td><?php echo $car->miles; ?></td>
+                        <td><?php echo $car->description; ?></td>
+                        <td><?php echo $car->caracteristics; ?></td>
+                        <td><?php echo $car->equipement; ?></td>
+                        <td>
+                            <?php
+                            $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
+                            foreach ($mediaPaths as $index => $media) :
+                                $imagePath = $media->path;
+                            ?>
+                                <img src="../../../<?php echo $imagePath ?>" alt="Photo de voiture" width="100">
+                            <?php endforeach ?>
+                        </td>
+                        <td>
+                            <form action="" method="post" id="myForm" style="display: inline;">
+                                <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
+                                <button type="submit" class="btn btn-primary" name="editCar">Modifier</button>
+                            </form>
+                            <form action="" method="post" style="display: inline;">
+                                <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
+                                <button type="submit" class="btn btn-danger" name="deleteCar">Supprimer</button>
+                            </form>
+                        </td>
+                        <td>
+                            <?php
+                            // Ajouté par : récupère l'email de l'id récupéré dans la db, le format et l'affiche si différent de l'utilisateur connecté sinon affiche 'vous'
+                            $user = $userModel->getUserDataById($car->user_id);
+                            if ($_SESSION['user_id'] === $car->user_id) {
+                                echo 'Vous';
+                            } else {
+                                echo formatEmail($user->email);
+                            }
+                            ?>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($carsData as $car) : ?>
-                        <tr>
-                            <td><?php echo $car->name; ?></td>
-                            <td><?php echo $car->brand; ?></td>
-                            <td><?php echo $car->year; ?></td>
-                            <td><?php echo $car->price; ?></td>
-                            <td><?php echo $car->miles; ?></td>
-                            <td><?php echo $car->description; ?></td>
-                            <td><?php echo $car->caracteristics; ?></td>
-                            <td><?php echo $car->equipement; ?></td>
-                            <td>
-                                <?php
-                                $mediaPaths = $mediaModel->getMediaPathsByCarId($car->id);
-                                foreach ($mediaPaths as $index => $media) :
-                                    $imagePath = $media->path;
-                                ?>
-                                    <img src="../../../<?php echo $imagePath ?>" alt="Photo de voiture" width="100">
-                                <?php endforeach ?>
-                            </td>
-                            <td>
-                                <form action="" method="post" id="myForm" style="display: inline;">
-                                    <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
-                                    <button type="submit" class="btn btn-primary" name="editCar">Modifier</button>
-                                </form>
-                                <form action="" method="post" style="display: inline;">
-                                    <input type="hidden" name="carId" value="<?php echo $car->id; ?>">
-                                    <button type="submit" class="btn btn-danger" name="deleteCar">Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
-            <?php if (isset($carsController) && !empty($carsController->getErrorMessage())) : ?>
-                <div class="alert alert-danger"><?php echo $carsController->getErrorMessage(); ?></div>
-            <?php endif; ?>
+        <?php if (isset($carsController) && !empty($carsController->getErrorMessage())) : ?>
+            <div class="alert alert-danger"><?php echo $carsController->getErrorMessage(); ?></div>
+        <?php endif; ?>
 
 
-            <form action="" method="POST">
-                <button type="submit" class="btn btn-primary" name="addCars">Ajouter</button>
-            </form>
-            <?php
-            $showAddCarForm = '';
-            if (isset($_POST['addCars'])) {
-                $showAddCarForm = true;
-                echo '<div class="card card-body w-50 m-auto">';
-            } else if (isset($_POST['editCar'])) {
-                $showAddCarForm = false;
-                foreach ($_POST as $key => $value) {
-                    if (strpos($key, 'editCar_') !== false) {
-                        $carId = explode('_', $key)[1];
-                        break;
-                    }
+        <form action="" method="POST">
+            <button type="submit" class="btn btn-primary" name="addCars">Ajouter</button>
+        </form>
+        <?php
+        $showAddCarForm = '';
+        if (isset($_POST['addCars'])) {
+            $showAddCarForm = true;
+            echo '<div class="card card-body w-50 m-auto">';
+        } else if (isset($_POST['editCar'])) {
+            $showAddCarForm = false;
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'editCar_') !== false) {
+                    $carId = explode('_', $key)[1];
+                    break;
                 }
-                echo '<div class="card card-body w-50 m-auto">';
             }
-            ?>
-            <?php if ($showAddCarForm) : ?>
-                <h5>Ajouter une voiture</h5>
-                <?php echo $addCarForm; ?>
-                <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
-            <?php elseif ($showAddCarForm === false) : ?>
-                <h5>Modifier une voiture</h5>
-                <?php echo $editCarForm; ?>
-                <input type="hidden" name="carId" value="<?php echo $_POST['carId']; ?>">
-                <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
-            <?php endif; ?>
-            </div>
-        </section>
-    </main>
+            echo '<div class="card card-body w-50 m-auto">';
+        }
+        ?>
+        <?php if ($showAddCarForm) : ?>
+            <h5>Ajouter une voiture</h5>
+            <?php echo $addCarForm; ?>
+            <!-- INPUT permettant de récupérer l'id de l'utilisateur connecté pour l'enregistrer dans la table !-->
+            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+            <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
+        <?php elseif ($showAddCarForm === false) : ?>
+            <h5>Modifier une voiture</h5>
+            <?php echo $editCarForm; ?>
+            <input type="hidden" name="carId" value="<?php echo $_POST['carId']; ?>">
+            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+            <button type="button" class="btn btn-danger" onclick="window.location.href = 'backoffice.php';">Annuler</button>
+        <?php endif; ?>
+        </div>
+    </section>
 
+    <section>
 
-
-<?php endif ?>
+    </section>
+</main>
 
 <?php
 require_once __DIR__ . '/../Templates/footer.php';
